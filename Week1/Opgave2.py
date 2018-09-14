@@ -30,12 +30,28 @@ class Testboard():
     def get_board(self):
         return self.filled_board
 
+# class Search():
+#     @staticmethod
+#     def look_for_neighbors(x_letter, y_letter):
 
-class Boggle():
 
-    board = Testboard()
-    for line in board.get_board():
-        print(line)
+board = Testboard().get_board()
+# for line in board:
+#     print(line)
 
-    with open('words.txt', 'rt', encoding='utf-8') as f:
-        print(f.read())
+X=7
+Y=7
+
+neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
+                           for y2 in range(y-1, y+2)
+                           if (-1 < x <= X and
+                               -1 < y <= Y and
+                               (x != x2 or y != y2) and
+                               (0 <= x2 <= X) and
+                               (0 <= y2 <= Y))]
+
+print(neighbors(2,2))
+
+
+    # with open('words.txt', 'rt', encoding='utf-8') as f:
+    #     print(f.read())
