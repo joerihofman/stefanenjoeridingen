@@ -47,6 +47,10 @@ class UsefullMethods():
             if o.state == "left":
                 return False
 
+class Search():
+    @staticmethod
+    def get_possible_moves():
+        return True;
 
 
 class Main():
