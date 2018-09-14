@@ -1,5 +1,6 @@
 import random
 import string
+import collections
 
 
 class Board():
@@ -30,12 +31,17 @@ class Testboard():
     def get_board(self):
         return self.filled_board
 
+
+
+
 # class Search():
 #     @staticmethod
 #     def look_for_neighbors(x_letter, y_letter):
 
 
 board = Testboard().get_board()
+
+
 # for line in board:
 #     print(line)
 
@@ -51,6 +57,18 @@ neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
                                (0 <= y2 <= Y))]
 
 print(neighbors(2,2))
+
+
+def dictionary():
+    list = []
+    with open('words.txt') as f:
+        for line in f:
+            word = line.rsplit()
+            list.append(word)
+
+
+list = dictionary()
+print(list)
 
 
     # with open('words.txt', 'rt', encoding='utf-8') as f:
