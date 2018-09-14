@@ -1,14 +1,22 @@
-class Boggle:
-
-    def makeBoard(board_size):
-        board = []
-        for i in range(board_size):
-            board.append([] * board_size)
-
-        return board
+import random
+import string
+import collections
 
 
+class Boggle():
 
-    board = [5][5]
+    def makeBoard(size):
 
+        grid = [[random.choice(string.ascii_lowercase) for c in range(size)] for r in range(size)]
+
+        return grid
+
+
+
+
+
+    board = makeBoard(5)
     print(board)
+
+
+
