@@ -11,54 +11,54 @@ class Movables():
         else:
             self.state == "left"
 
-    def getName(self):
+    def get_name(self):
         return self.name
 
-    def getState(self):
+    def get_state(self):
         return self.state
 
 
 
 class PrintToCLI():
     @staticmethod
-    def printAll(list):
+    def print_all(list):
         left = ""
         right = ""
-        for Objects in list:
-            if Objects.state == "left":
-                left += Objects.name
-            elif Objects.state == "right":
-                right += Objects.name
+        for o in list:
+            if o.state == "left":
+                left += o.name
+            elif o.state == "right":
+                right += o.name
         print(left + "||" + right)
 
 
 class UsefullMethods():
     @staticmethod
-    def getsEaten(o1, o2):
-        if o1.name == "G" and o2.name == "C":
+    def gets_eaten(o1, o2):
+        if o1.name == 'G' and o2.name == 'C':
             return True
-        elif o1.name == "W" and o2.name == "G":
+        elif o1.name == 'W' and o2.name == 'G':
             return True
         else: return False
 
     @staticmethod
-    def checkGoalState(list):
-        for Objects in list:
-            if Objects.state == "left":
+    def check_goal_state(list):
+        for o in list:
+            if o.state == "left":
                 return False
 
 
 
 class Main():
-    objectList = []
+    object_list = []
 
-    objectList.append(Movables("F"))
-    objectList.append(Movables("C"))
-    objectList.append(Movables("G"))
-    objectList.append(Movables("W"))
+    object_list.append(Movables("F"))
+    object_list.append(Movables("C"))
+    object_list.append(Movables("G"))
+    object_list.append(Movables("W"))
 
-    UsefullMethods.getsEaten(objectList.__getitem__(0), objectList.__getitem__(2))
+    UsefullMethods.gets_eaten(object_list.__getitem__(0), object_list.__getitem__(2))
 
-    UsefullMethods.checkGoalState(objectList)
+    UsefullMethods.check_goal_state(object_list)
 
-    PrintToCLI.printAll(objectList)
+    PrintToCLI.print_all(object_list)
