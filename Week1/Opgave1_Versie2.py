@@ -1,4 +1,4 @@
-class Objects():
+class Movables():
     name = ""
     state = "left"
 
@@ -52,10 +52,10 @@ class UsefullMethods():
 class Main():
     objectList = []
 
-    objectList.append(Objects("F"))
-    objectList.append(Objects("C"))
-    objectList.append(Objects("G"))
-    objectList.append(Objects("W"))
+    objectList.append(Movables("F"))
+    objectList.append(Movables("C"))
+    objectList.append(Movables("G"))
+    objectList.append(Movables("W"))
 
     UsefullMethods.getsEaten(objectList.__getitem__(0), objectList.__getitem__(2))
 
