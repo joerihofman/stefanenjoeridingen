@@ -19,3 +19,5 @@ class Boggle():
     for line in board.get_board():
         print(line)
 
+    with open('words.txt', 'rt', encoding='utf-8') as f:
+        print(f.read())
