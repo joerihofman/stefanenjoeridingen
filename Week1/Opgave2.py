@@ -19,7 +19,7 @@ class Testboard():
     def __init__(self):
         line_one = ['a', 'c', 'h', 't', 'x', 'x', 'o']
         line_two = ['o', 'g', 'e', 'n', 'x', 'x', 'l']
-        line_three = ['x', 'x', 'x', 'k', 'p', 'a', 'i']
+        line_three = ['c', 'e', 's', 'k', 'p', 'a', 'i']
         line_four = ['x', 'x', 'x', 'o', 'x', 'x', 'e']
         line_five = ['x', 'x', 'h', 'x', 'x', 'x', 'x']
         line_six = ['x', 'c', 'x', 'o', 'x', 'x', 'x']
