@@ -1,6 +1,5 @@
 import random
 import string
-import collections
 
 
 class Board():
@@ -32,18 +31,22 @@ class Testboard():
         return self.filled_board
 
 
-
-
-# class Search():
-#     @staticmethod
-#     def look_for_neighbors(x_letter, y_letter):
+class Utils():
+    @staticmethod
+    def words_from_file_to_set():
+        set_of_words = set()
+        with open('words.txt') as f:
+            for line in f:
+                set_of_words.add(line.strip("\n"))
+        return set_of_words
 
 
 board = Testboard().get_board()
 
-
 # for line in board:
 #     print(line)
+
+#---https://stackoverflow.com/questions/1620940/determining-neighbours-of-cell-two-dimensional-list---
 
 X=7
 Y=7
@@ -58,17 +61,12 @@ neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
 
 print(neighbors(2,2))
 
-
-def dictionary():
-    list = []
-    with open('words.txt') as f:
-        for line in f:
-            word = line.rsplit()
-            list.append(word)
+for i in list:
+    print(i)
 
 
-list = dictionary()
-print(list)
+
+# print(list(Utils.words_to_set()))
 
 
     # with open('words.txt', 'rt', encoding='utf-8') as f:
