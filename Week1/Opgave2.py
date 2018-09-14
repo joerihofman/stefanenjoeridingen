@@ -1,23 +1,21 @@
 import random
 import string
-import collections
+
+
+class Board():
+
+    filled_board = []
+
+    def __init__(self, size):
+        self.filled_board = [[random.choice(string.ascii_lowercase) for c in range(size)] for r in range(size)]
+
+    def get_board(self):
+        return self.filled_board
 
 
 class Boggle():
 
-    def makeBoard(size):
-
-        grid = [[random.choice(string.ascii_lowercase) for c in range(size)] for r in range(size)]
-
-        return grid
-
-
-
-
-
-    board = makeBoard(5)
-    for line in board:
+    board = Board(5)
+    for line in board.get_board():
         print(line)
-
-
 
