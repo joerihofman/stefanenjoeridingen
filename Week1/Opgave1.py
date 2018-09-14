@@ -11,14 +11,6 @@ def eats(x, y):
     else:
         return False
 
-# Defines if a pair of entities is safe to be left alone on one side
-# of the river.
-def safe_pair(x, y):
-    if eats(x, y) or eats(y, x):
-        return False
-    else:
-        return True
-
 def state_of(who, state):
     try:
         return state[who]
@@ -46,7 +38,7 @@ def move(who, state):
 def goal_reach(state):
     if not state:
         return False
-    return (state_of('man', state)=='right' and
+    return (state_of('man', state) == 'right' and
             state_of('goat', state)=='right' and
             state_of('wolf', state)=='right' and
             state_of('cabbage',state)=='right')

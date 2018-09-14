@@ -16,7 +16,8 @@ class Boggle():
 
 
     board = makeBoard(5)
-    print(board)
+    for line in board:
+        print(line)
 
 
 

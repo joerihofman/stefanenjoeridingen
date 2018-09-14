@@ -41,11 +41,15 @@ class UsefullMethods():
             return True
         else: return False
 
+    def safe_state(object_list):
+        if
+
     @staticmethod
     def check_goal_state(list):
         for o in list:
             if o.state == "left":
                 return False
+
 
 class Search():
     @staticmethod
