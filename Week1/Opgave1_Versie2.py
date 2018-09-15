@@ -1,72 +1,123 @@
-class Movables():
-    name = ""
-    state = "left"
+from enum import Enum;
 
-    def __init__(self, name):
+
+class MovingException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
+class State(Enum):
+    LEFT = "left"
+    RIGHT = "right"
+    CENTER = "center"
+
+
+class Movable:
+    name = ''
+    state = State
+
+    def __init__(self, name, state):
         self.name = name
+        self.state = state
 
-    def move(self, state):
-        if state == "left":
-            self.state = "right"
+    def move(self):
+        if self.state == State.LEFT:
+            self.state = State.RIGHT
         else:
-            self.state == "left"
-
-    def get_name(self):
-        return self.name
-
-    def get_state(self):
-        return self.state
+            self.state == State.LEFT
 
 
-
-class PrintToCLI():
-    @staticmethod
-    def print_all(list):
-        left = ""
-        right = ""
-        for o in list:
-            if o.state == "left":
-                left += o.name
-            elif o.state == "right":
-                right += o.name
-        print(left + "||" + right)
-
-
-class UsefullMethods():
+class UsefulMethods:
     @staticmethod
     def gets_eaten(o1, o2):
-        if o1.name == 'G' and o2.name == 'C':
+        if o1 == 'G' and o2.name == 'C':
             return True
         elif o1.name == 'W' and o2.name == 'G':
             return True
-        else: return False
+        else:
+            return False
 
+    @staticmethod
     def safe_state(object_list):
-        if
+        for o in object_list:
+            if o.state != State.RIGHT:
+                return False
+        return True
 
     @staticmethod
     def check_goal_state(list):
         for o in list:
-            if o.state == "left":
+            if o.state == State.LEFT:
                 return False
 
-
-class Search():
     @staticmethod
-    def get_possible_moves():
-        return True;
+    def make_state(farmer, cabbage, goat, wolf, river):
+        left_side = []
+        right_side = []
+        whole_plane = []
+        left_side.append(farmer) if farmer.state == State.LEFT else right_side.append(farmer)
+        left_side.append(cabbage) if cabbage.state == State.LEFT else right_side.append(cabbage)
+        left_side.append(goat) if goat.state == State.LEFT else right_side.append(goat)
+        left_side.append(wolf) if wolf.state == State.LEFT else right_side.append(wolf)
+
+        for movable in left_side:
+            whole_plane.append(movable)
+
+        whole_plane.append(river)
+
+        for movable in right_side:
+            whole_plane.append(movable)
+
+        return whole_plane
+
+class Search:
+    @staticmethod
+    def possible_children(current_state):
+
+        return None
 
 
-class Main():
-    object_list = []
+class Move:
+    @staticmethod
+    def move_movables(current_state):
+        Search.possible_children()
+        try:
+            raise MovingException("oh mijn god",)
+        except MovingException:
+            print("dat was het dan")
+            raise
 
-    object_list.append(Movables("F"))
-    object_list.append(Movables("C"))
-    object_list.append(Movables("G"))
-    object_list.append(Movables("W"))
 
-    UsefullMethods.gets_eaten(object_list.__getitem__(0), object_list.__getitem__(2))
+class PrintToCLI:
+    @staticmethod
+    def print_all(list):
+        state = ""
 
-    UsefullMethods.check_goal_state(object_list)
+        for movable in list:
+            state += movable.name
 
-    PrintToCLI.print_all(object_list)
+        print(state)
+
+
+class Main:
+    farmer = Movable('F', State.LEFT)
+    cabbage = Movable('C', State.LEFT)
+    goat = Movable('G', State.LEFT)
+    wolf = Movable('W', State.LEFT)
+    river = Movable('||', State.CENTER)
+
+    current_state = UsefulMethods.make_state(farmer, cabbage, goat, wolf, river)
+
+    PrintToCLI.print_all(current_state)
+
+    Move.move_movables(current_state)
+
+    current_state = UsefulMethods.make_state(farmer, cabbage, goat, wolf, river)
+
+    PrintToCLI.print_all(current_state)
+
+
+    # UsefulMethods.gets_eaten(list_of_movables.__getitem__(0), list_of_movables.__getitem__(2))
+
+    # UsefulMethods.check_goal_state(list_of_movables)
+
