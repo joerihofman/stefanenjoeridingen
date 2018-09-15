@@ -2,15 +2,6 @@ entity = ['goat', 'wolf', 'cabbage']
 path = []
 visited = []
 
-# Defines who can eat whom
-def eats(x, y):
-    if x == 'goat' and y == 'cabbage':
-        return True
-    elif x == 'wolf' and y == 'goat':
-        return True
-    else:
-        return False
-
 def state_of(who, state):
     try:
         return state[who]
@@ -63,8 +54,6 @@ def expand_states(state):
             move('man', child)
             move(ent, child)
             check_add_child(child, children)
-            #else:
-        #print "unsafe state", child
     return children
 
 
@@ -84,12 +73,8 @@ def dfs(node, visited):
 
 def find_all_paths(node, path=[]):
     path = path + [node]
-
     if goal_reach(node):
         return [path]
-
-
-
     paths = []
 
     for child in expand_states(node):
@@ -99,6 +84,23 @@ def find_all_paths(node, path=[]):
             for newpath in newpaths:
                 paths.append(newpath)
     return paths
+
+
+def print_states(all_paths):
+    for paths in all_paths:
+        print("path:")
+        for state in paths:
+
+            leftside = ''
+            rightside = ''
+            for k, v in state.items():
+                if v == 'left':
+                    leftside += k[0]
+                elif v == 'right':
+                    rightside += k[0]
+
+            string = leftside + '||' + rightside
+            print(string)
 
 
 # Initialization of the global variables
@@ -111,15 +113,14 @@ print(dfs(initial_state, visited))
 
 
 print("find a path")
-for s in visited:
-    print(s)
+
+
 
 
 # print(find_all_paths(initial_state))
 print("finding all paths")
-paths = find_all_paths(initial_state)
+all_paths = find_all_paths(initial_state)
 
-for path in paths:
-    print("path:")
-    for s in path:
-        print(s)
+print_states(all_paths)
+
+
