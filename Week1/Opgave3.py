@@ -36,15 +36,8 @@ class Board:
         for pos in positions:
             row = pos[0]
             col = pos[1]
-            if row < 0:
-                row = length
-            elif row > length:
-                row = 0
-            if col < 0:
-                col = length
-            elif col > length:
-                col = 0
-            neighbors.append((row, col))
+            if (row and col < length) and (row and col > 0):
+                neighbors.append((row, col))
         return neighbors
 
 
