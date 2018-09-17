@@ -7,8 +7,17 @@ class Board:
         for row in self.board:
             print(' '.join([str(letter) for letter in row]))
 
-    def change_number(self, x, y):
+    def change_numbe(self, x, y):
         None
+
+    def get_postition(self, number):
+        for row in range(len(self.board)):
+            for col in range(len(self.board)):
+                print(self.board[row][col])
+                if self.board[row][col] == number:
+                    return((row, col))
+
+
 
 
 class Main:
@@ -16,6 +25,8 @@ class Main:
     def main():
         board = Board()
         board.print_board()
+
+        print(board.get_postition(5))
 
 
 Main.main()
