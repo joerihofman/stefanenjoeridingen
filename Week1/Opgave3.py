@@ -23,12 +23,11 @@ class Board:
                     return row, col
 
     def get_clues(self):
-        clues = []
         for row in range(len(self.board)):
             for col in range(len(self.board)):
                 if self.board[row][col] != 0:
                     self.clues.append(self.board[row][col])
-        return clues
+        return self.clues
 
 
 
@@ -43,7 +42,7 @@ class Main:
 
         board.print_board()
 
-        board.change_number(0, 1, 3)
+        board.change_number(0, 0, 3)
         board.print_board()
 
 
