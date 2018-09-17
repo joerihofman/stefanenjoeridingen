@@ -1,12 +1,22 @@
 class Board:
-    @staticmethod
-    def print_board(board):
-        for row in board:
-            print(row)
+
+    def __init__(self):
+        self.board = [[1, 0, 0], [0, 5, 0], [0, 0, 9]]
+
+    def print_board(self):
+        for row in self.board:
+            print(' '.join([str(letter) for letter in row]))
+
+    def change_number(self, x, y):
+        None
 
 
 class Main:
-    def main(self):
-        board = [[1, 0, 0], [0, 5, 0], [0, 0, 9]]
-        Board.print_board(board)
+    @staticmethod
+    def main():
+        board = Board()
+        board.print_board()
+
+
+Main.main()
 
