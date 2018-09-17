@@ -6,18 +6,19 @@ class Board:
     def print_board(self):
         for row in self.board:
             print(' '.join([str(letter) for letter in row]))
+        print('')
 
-    def change_numbe(self, x, y):
-        None
+    def change_number(self, x, y, new_value):
+        if self.board[x][y] == 0:
+            self.board[x][y] = new_value
+            return True
+        return False
 
     def get_postition(self, number):
         for row in range(len(self.board)):
             for col in range(len(self.board)):
-                print(self.board[row][col])
                 if self.board[row][col] == number:
-                    return((row, col))
-
-
+                    return row, col
 
 
 class Main:
@@ -25,8 +26,6 @@ class Main:
     def main():
         board = Board()
         board.print_board()
-
-        print(board.get_postition(5))
 
 
 Main.main()
