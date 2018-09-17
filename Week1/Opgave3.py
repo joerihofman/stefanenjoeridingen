@@ -2,7 +2,7 @@ class Board:
 
     def __init__(self):
         self.board = [[1, 0, 0], [0, 5, 0], [0, 0, 9]]
-        self.clues = []
+        self.already_filled_in_to_the_board = []
 
     def print_board(self):
         for row in self.board:
@@ -10,7 +10,7 @@ class Board:
         print('')
 
     def change_number(self, row, col, new_value):
-        if self.board[row][col] not in self.clues:
+        if self.board[row][col] not in self.already_filled_in_to_the_board:
             self.board[col][row] = new_value
             return True
         return False
@@ -25,8 +25,8 @@ class Board:
         for row in range(len(self.board)):
             for col in range(len(self.board)):
                 if self.board[row][col] != 0:
-                    self.clues.append(self.board[row][col])
-        return self.clues
+                    self.already_filled_in_to_the_board.append(self.board[row][col])
+        return self.already_filled_in_to_the_board
 
     def get_neighbors(self, row, col):
         print(row.__str__() + "  " + col.__str__())
