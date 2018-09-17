@@ -29,15 +29,14 @@ class Board:
         return self.clues
 
     def get_neighbors(self, row, col):
+        print(row.__str__() + "  " + col.__str__())
         neighbors = []
         length = len(self.board) - 1
 
         positions = [(row-1, col), (row, col-1), (row, col+1), (row+1, col)]
         for pos in positions:
-            row = pos[0]
-            col = pos[1]
-            if (row and col < length) and (row and col > 0):
-                neighbors.append((row, col))
+            if 0 <= pos[0] <= length and 0 <= pos[1] <= length:
+                neighbors.append((pos[0], pos[1]))
         return neighbors
 
 
@@ -47,7 +46,7 @@ class Main:
         board = Board()
         board.print_board()
 
-        print(board.get_neighbors(*board.get_postition(1)))
+        print(board.get_neighbors(*board.get_postition(5)))
 
 
 Main.main()
