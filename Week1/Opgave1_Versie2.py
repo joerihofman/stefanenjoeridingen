@@ -23,33 +23,11 @@ class Movable:
     def move(self):
         if self.state == State.LEFT:
             self.state = State.RIGHT
-        else:
+        elif self.state == State.RIGHT:
             self.state == State.LEFT
 
 
 class UsefulMethods:
-    @staticmethod
-    def gets_eaten(o1, o2):
-        if o1 == 'G' and o2.name == 'C':
-            return True
-        elif o1.name == 'W' and o2.name == 'G':
-            return True
-        else:
-            return False
-
-    @staticmethod
-    def safe_state(object_list):
-        for o in object_list:
-            if o.state != State.RIGHT:
-                return False
-        return True
-
-    @staticmethod
-    def check_goal_state(list):
-        for o in list:
-            if o.state == State.LEFT:
-                return False
-
     @staticmethod
     def make_state(farmer, cabbage, goat, wolf, river):
         left_side = []
@@ -70,22 +48,63 @@ class UsefulMethods:
 
         return whole_plane
 
+    @staticmethod
+    def check_if_goal_state_reached(current_state):
+        for movable in current_state:
+            if movable.state == State.RIGHT:
+                return False
+        return True
+
+    @staticmethod
+    def check_valid_state(current_state):
+        left_side = []
+        right_side = []
+        for movable in current_state:
+            if movable.state != State.CENTER:
+                left_side.append(movable) if movable.state == State.LEFT else right_side.append(movable)
+        if left_side.__contains__(Movable.name=='C') and left_side.__contains__(Movable.name=='G'):
+            return False
+        elif left_side.__contains__(Movable.name=='G') and left_side.__contains__(Movable.name=='W'):
+            return False
+        else:
+            return True
+
+
+    # def gets_eaten(o1, o2):
+    #     if o1 == 'G' and o2.name == 'C':
+    #         return True
+    #     elif o1.name == 'W' and o2.name == 'G':
+    #         return True
+    #     else:
+    #         return False
+
 class Search:
     @staticmethod
     def possible_children(current_state):
+        farmer_state = None
+        every_item_farmer_side = []
 
-        return None
+        for movable in current_state:
+            if movable.name == 'F':
+                farmer_state = movable.state
+                break
+
+        for movable in current_state:
+            if movable.state == farmer_state and movable.name != 'F':
+                every_item_farmer_side.append(movable)
+
+        # try:
+        #     raise MovingException("oh mijn god",)
+        # except MovingException:
+        #     print("dat was het dan")
+        #     raise
+        # return None
 
 
 class Move:
     @staticmethod
-    def move_movables(current_state):
-        Search.possible_children()
-        try:
-            raise MovingException("oh mijn god",)
-        except MovingException:
-            print("dat was het dan")
-            raise
+    def move_movables():
+        None
 
 
 class PrintToCLI:
@@ -108,11 +127,13 @@ class Main:
 
     current_state = UsefulMethods.make_state(farmer, cabbage, goat, wolf, river)
 
-    PrintToCLI.print_all(current_state)
+    # PrintToCLI.print_all(current_state)
 
-    Move.move_movables(current_state)
+    Search.possible_children(current_state)
 
-    current_state = UsefulMethods.make_state(farmer, cabbage, goat, wolf, river)
+    # Move.move_movables(current_state)
+
+    # current_state = UsefulMethods.make_state(farmer, cabbage, goat, wolf, river)
 
     PrintToCLI.print_all(current_state)
 
