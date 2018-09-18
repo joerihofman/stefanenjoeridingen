@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 import heapq
+import sched, time
+
+
 
 import random
 
@@ -18,6 +21,9 @@ goalc = 'yellow'
 PAUSE_STATUS = True
 PROB = 0.3 # probability blocking node
 SIZE  = 25 # the nr of nodes=grid crossings in a row (or column)
+
+s = sched.scheduler(time.time, time.sleep)
+
 
 # global var: pixel sizes
 CELL  = 35 # size of cell/square in pixels
@@ -157,9 +163,15 @@ def control_panel():
         global int_i
         PAUSE_STATUS = False
 
+        # s = sched.scheduler(time.time, time.sleep)
+
+        s.enter(3, 1, draw_line_on_grid(canvas, int_i))
         # plot a sample path for demonstration
-        draw_line_on_grid(canvas, int_i)
-        int_i += 1
+
+
+            # draw_line_on_grid(canvas, int_i)
+            # int_i += 1
+            # timer.sleep
 
         pause_button.configure(background = 'SystemButtonFace')
         start_button.configure(background = 'green')
@@ -213,8 +225,14 @@ def control_panel():
     box2.bind("<<ComboboxSelected>>", box_update2)
 
     def draw_line_on_grid(canvas, i):
+        global int_i
+        global s
+        int_i = int_i + 1
+
         plot_line_segment(canvas, i, i, i, i+1)
         plot_line_segment(canvas, i, i+1, i+1, i+1)
+        if PAUSE_STATUS == False:
+            s.enter(3000, 1, draw_line_on_grid(canvas, int_i))
 
 
 root = tk.Tk()
