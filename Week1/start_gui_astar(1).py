@@ -144,26 +144,32 @@ def a_star_search(graph, start_for_search, goal_for_search):
     return came_from, cost_so_far
 
 
+int_i = 0
+
 def control_panel():
     mf = ttk.LabelFrame(right_frame)
     mf.grid(column=0, row=0, padx=8, pady=4)
     mf.grid_rowconfigure(2, minsize=10)
 
+
     def start():
         global PAUSE_STATUS
+        global int_i
         PAUSE_STATUS = False
+
+        # plot a sample path for demonstration
+        draw_line_on_grid(canvas, int_i)
+        int_i += 1
 
         pause_button.configure(background = 'SystemButtonFace')
         start_button.configure(background = 'green')
-        print(PAUSE_STATUS)
 
     def pause():
         global PAUSE_STATUS
         PAUSE_STATUS = True
+
         pause_button.configure(background = 'red')
         start_button.configure(background = 'SystemButtonFace')
-
-        print(PAUSE_STATUS)
 
 
     start_button = tk.Button(mf, text="Start", command=start, width=10)
@@ -204,7 +210,11 @@ def control_panel():
     box2.grid(row=4, column=1, sticky='ew')
     box2['values'] = tuple(str(i) for i in range(10))
     box2.current(3)
-    box2.bind("<<ComboboxSelected>>", box_update2)    
+    box2.bind("<<ComboboxSelected>>", box_update2)
+
+    def draw_line_on_grid(canvas, i):
+        plot_line_segment(canvas, i, i, i, i+1)
+        plot_line_segment(canvas, i, i+1, i+1, i+1)
 
 
 root = tk.Tk()
@@ -224,11 +234,6 @@ canvas.pack(fill=tk.BOTH, expand=True)
 
 make_grid(canvas)
 init_grid(canvas)
-
-# plot a sample path for demonstration
-for i in range(SIZE-1):
-    plot_line_segment(canvas, i, i, i, i+1)
-    plot_line_segment(canvas, i, i+1, i+1, i+1)
 
 # show start and goal nodes
 plot_node(canvas, start, color=startc)
