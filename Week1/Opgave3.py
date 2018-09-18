@@ -94,5 +94,6 @@ class Main:
         board.solve(1)
         board.print_board()
 
+
 Main.main()
 
