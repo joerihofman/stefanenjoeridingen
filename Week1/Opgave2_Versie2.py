@@ -60,15 +60,12 @@ words, prefixes = get_dictionary()
 
 def dfs(board, found, row, col, path = None, word = None):
     letter = board[row][col]
-    # print(letter)
-
     if path is None or word is None:
         path = [(row, col)]
         word = letter
     else:
         path.append((row, col))
         word = word + letter
-
         if word not in prefixes:
             return
 
@@ -76,7 +73,6 @@ def dfs(board, found, row, col, path = None, word = None):
     print(word)
 
     if word in words:
-
         found.add(word)
 
     for neighbor in get_neighboars(board, row, col):
