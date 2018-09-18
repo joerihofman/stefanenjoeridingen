@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-
 import heapq
+
 import random
 
 #assuming a resulution of 1920 x 1080 = 16 : 9
@@ -15,20 +15,19 @@ startc = '#C7F464'
 goalc = 'yellow'
 
 # global vars
-START_STATUS = False
 PAUSE_STATUS = False
 PROB = 0.3 # probability blocking node
-SIZE = 25 # the nr of nodes=grid crossings in a row (or column)
+SIZE  = 25 # the nr of nodes=grid crossings in a row (or column)
 
 # global var: pixel sizes
-CELL = 35 # size of cell/square in pixels
-W = (SIZE-1) * CELL # width of grid in pixels
-H = W # height of grid
+CELL  = 35 # size of cell/square in pixels
+W  = (SIZE-1) * CELL # width of grid in pixels
+H  = W # height of grid
 TR = 10 # translate/move the grid, upper left is 10,10
 
-grid = [[0 for x in range(SIZE)] for y in range(SIZE)]
+grid  = [[0 for x in range(SIZE)] for y in range(SIZE)]
 start = (0, 0)
-goal = (SIZE-1, SIZE-1)
+goal  = (SIZE-1, SIZE-1)
 
 
 class PriorityQueue:
@@ -53,6 +52,18 @@ class PriorityQueue:
         return heapq.heappop(self.elements)[1]
 
 
+def get_neighbors(board, position):
+    neighbors = []
+    (row, col) = position
+    length = len(board) - 1
+
+    positions = [(row-1, col), (row, col-1), (row, col+1), (row+1, col)]
+    for pos in positions:
+        if 0 <= pos[0] <= length and 0 <= pos[1] <= length:
+            if board[pos[0]][pos[1]] != 'b':
+                neighbors.append((pos[0], pos[1]))
+    return neighbors
+
 def bernoulli_trial():
     return 1 if random.random() < PROB else 0
 
@@ -62,7 +73,7 @@ def get_grid_value(node):
     return grid[node[0]][node[1]]
 
 
-def set_grid_value(node, value): 
+def set_grid_value(node, value):
     # node is a tuple (x, y), grid is a 2D list [x][y]
     grid[node[0]][node[1]] = value
 
@@ -218,6 +229,9 @@ make_grid(canvas)
 init_grid(canvas)
 
 # plot a sample path for demonstration
+for i in range(SIZE-1):
+    plot_line_segment(canvas, i, i, i, i+1)
+    plot_line_segment(canvas, i, i+1, i+1, i+1)
 
 # show start and goal nodes
 plot_node(canvas, start, color=startc)
