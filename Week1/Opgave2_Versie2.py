@@ -88,7 +88,7 @@ def play_boggle(board, found):
             dfs(board, found, r, c)
 
 
-board = make_board(10)
+board = make_board(4)
 print_board(board)
 
 found = set()
