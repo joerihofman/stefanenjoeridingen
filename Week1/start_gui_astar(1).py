@@ -15,7 +15,7 @@ startc = '#C7F464'
 goalc = 'yellow'
 
 # global vars
-PAUSE_STATUS = False
+PAUSE_STATUS = True
 PROB = 0.3 # probability blocking node
 SIZE  = 25 # the nr of nodes=grid crossings in a row (or column)
 
@@ -150,28 +150,25 @@ def control_panel():
     mf.grid_rowconfigure(2, minsize=10)
 
     def start():
-        global START_STATUS
-        if START_STATUS:
-            start_button.configure(background='SystemButtonFace')
-            START_STATUS = False
-        else:
-            for i in range(SIZE-1):
-                plot_line_segment(canvas, i, i, i, i+1)
-                plot_line_segment(canvas, i, i+1, i+1, i+1)
-            start_button.configure(background='green')
-            START_STATUS = True
+        global PAUSE_STATUS
+        PAUSE_STATUS = False
+
+        pause_button.configure(background = 'SystemButtonFace')
+        start_button.configure(background = 'green')
+        print(PAUSE_STATUS)
 
     def pause():
         global PAUSE_STATUS
-        if PAUSE_STATUS:
-            pause_button.configure(background='SystemButtonFace')
-            PAUSE_STATUS = False
-        else:
-            pause_button.configure(background='red')
-            PAUSE_STATUS = True
+        PAUSE_STATUS = True
+        pause_button.configure(background = 'red')
+        start_button.configure(background = 'SystemButtonFace')
+
+        print(PAUSE_STATUS)
+
 
     start_button = tk.Button(mf, text="Start", command=start, width=10)
     start_button.grid(row=1, column=1, sticky='w', padx=5, pady=5)
+
 
     pause_button = tk.Button(mf, text="Pause", command=pause, width=10)
     pause_button.grid(row=2, column=1, sticky='w', padx=5, pady=5)
