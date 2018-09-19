@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 import heapq
-import sched, time
+import sched
+import time
+import threading
 
 
 
@@ -165,9 +167,11 @@ def control_panel():
 
         # s = sched.scheduler(time.time, time.sleep)
 
-        s.enter(3, 1, draw_line_on_grid(canvas, int_i))
+        # s.enter(3, 1, draw_line_on_grid(canvas, int_i))
+        # s.run()
         # plot a sample path for demonstration
 
+        draw_line_on_grid(canvas, 0)
 
             # draw_line_on_grid(canvas, int_i)
             # int_i += 1
@@ -225,14 +229,22 @@ def control_panel():
     box2.bind("<<ComboboxSelected>>", box_update2)
 
     def draw_line_on_grid(canvas, i):
-        global int_i
-        global s
-        int_i = int_i + 1
-
-        plot_line_segment(canvas, i, i, i, i+1)
-        plot_line_segment(canvas, i, i+1, i+1, i+1)
         if PAUSE_STATUS == False:
-            s.enter(3000, 1, draw_line_on_grid(canvas, int_i))
+            plot_line_segment(canvas, i, i, i, i+1)
+            plot_line_segment(canvas, i, i+1, i+1, i+1)
+
+            threading.Timer(int(box1.get()), draw_line_on_grid, [canvas, i+1]).start()
+
+
+    def printit():
+        if PAUSE_STATUS == False:
+            print(int_i)
+            # print('speed = ', box1.get())
+            # int(box1.get())
+
+            threading.Timer(int(box1.get()), printit).start()
+            print( "doing stuff.......")
+
 
 
 root = tk.Tk()
@@ -274,4 +286,16 @@ for row in mijn_kolom:
 
 control_panel()
 
+
+
+
+
 root.mainloop()
+
+
+# scheduler = sched.scheduler(time.time, time.sleep)
+
+
+
+
+
