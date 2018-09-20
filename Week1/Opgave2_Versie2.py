@@ -58,9 +58,8 @@ def get_neighboars(board, row, col):
 words, prefixes = get_dictionary()
 
 
-def dfs(board, found, row, col, path = None, word = None):
+def dfs(board, found, row, col, path=None, word=None):
     letter = board[row][col]
-    # print(letter)
 
     if path is None or word is None:
         path = [(row, col)]

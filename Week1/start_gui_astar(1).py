@@ -1,12 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
+
 import heapq
 import sched
 import time
 import threading
-
-
-
 import random
 
 #assuming a resulution of 1920 x 1080 = 16 : 9
@@ -21,25 +19,20 @@ goalc = 'yellow'
 
 # global vars
 PAUSE_STATUS = True
-PROB = 0.3 # probability blocking node
-SIZE  = 25 # the nr of nodes=grid crossings in a row (or column)
-
-s = sched.scheduler(time.time, time.sleep)
-
+PROB = 0.3  # probability blocking node
+SIZE = 25  # the nr of nodes=grid crossings in a row (or column)
 
 # global var: pixel sizes
-CELL  = 35 # size of cell/square in pixels
-W  = (SIZE-1) * CELL # width of grid in pixels
-H  = W # height of grid
-TR = 10 # translate/move the grid, upper left is 10,10
+CELL = 35  # size of cell/square in pixels
+W = (SIZE-1) * CELL  # width of grid in pixels
+H = W  # height of grid
+TR = 10  # translate/move the grid, upper left is 10,10
 
-grid  = [[0 for x in range(SIZE)] for y in range(SIZE)]
-
-
-
+grid = [[0 for x in range(SIZE)] for y in range(SIZE)]
 start = (0, 0)
-goal  = (SIZE-1, SIZE-1)
+goal = (SIZE-1, SIZE-1)
 
+s = sched.scheduler(time.time, time.sleep)
 
 class PriorityQueue:
     # to be use in the A* algorithm
@@ -65,8 +58,9 @@ class PriorityQueue:
 
 def get_neighbors(board, position):
     neighbors = []
-    (row, col) = heapq.get(position)
     length = len(board) - 1
+
+    (row, col) = position
 
     positions = [(row-1, col), (row, col-1), (row, col+1), (row+1, col)]
     for pos in positions:
@@ -74,6 +68,7 @@ def get_neighbors(board, position):
             if board[pos[0]][pos[1]] != 'b':
                 neighbors.append((pos[0], pos[1]))
     return neighbors
+
 
 def bernoulli_trial():
     return 1 if random.random() < PROB else 0
@@ -92,11 +87,11 @@ def set_grid_value(node, value):
 def make_grid(c):
     # vertical lines
     for i in range(0, W+1, CELL):
-        c.create_line(i+TR, 0+TR, i+TR, H+TR, fill = gridc)
+        c.create_line(i+TR, 0+TR, i+TR, H+TR, fill=gridc)
 
     # horizontal lines
     for i in range(0, H+1, CELL):
-        c.create_line(0+TR, i+TR, W+TR, i+TR, fill = gridc)
+        c.create_line(0+TR, i+TR, W+TR, i+TR, fill=gridc)
 
 
 def init_grid(c):
@@ -105,14 +100,14 @@ def init_grid(c):
             node = (x, y)
             # start and goal cannot be bloking nodes
             if bernoulli_trial() and node != start and node != goal:
-                set_grid_value(node, 'b') # blocked
+                set_grid_value(node, 'b')  # blocked
                 plot_node(c, node, color=blockc)
             else:
                 set_grid_value(node, -1)  # init costs, -1 means infinite
 
 
 def plot_line_segment(c, x0, y0, x1, y1):
-    c.create_line(x0*CELL+TR, y0*CELL+TR, x1*CELL+TR, y1*CELL+TR, fill = pathc, width = 2)
+    c.create_line(x0*CELL+TR, y0*CELL+TR, x1*CELL+TR, y1*CELL+TR, fill=pathc, width=2)
 
 
 def plot_node(c, node, color):
@@ -121,7 +116,7 @@ def plot_node(c, node, color):
     y0 = node[1] * CELL - 4
     x1 = x0 + 8 + 1
     y1 = y0 + 8 + 1
-    c.create_rectangle(x0+TR, y0+TR, x1+TR, y1+TR, fill = color)
+    c.create_rectangle(x0+TR, y0+TR, x1+TR, y1+TR, fill=color)
 
 
 def heuristic(a, b):
@@ -142,6 +137,7 @@ def a_star_search(graph, start_for_search, goal_for_search):
 
     while not frontier.empty():
         current = frontier.get()
+        print(current.__str__)
 
         if current == goal_for_search:
             break
@@ -155,7 +151,6 @@ def a_star_search(graph, start_for_search, goal_for_search):
                 frontier.put(next, priority)
                 plot_line_segment(canvas, current[0], current[1], came_from[[next][0]], came_from[[next][1]])
                 came_from[next] = current
-
 
     return came_from, cost_so_far
 
@@ -176,33 +171,22 @@ def control_panel():
         global int_i
         PAUSE_STATUS = False
 
-        # s = sched.scheduler(time.time, time.sleep)
-
-        # s.enter(3, 1, draw_line_on_grid(canvas, int_i))
-        # s.run()
-        # plot a sample path for demonstration
-
-        # draw_line_on_grid(canvas, 0)
+        draw_line_on_grid(canvas, 0)
 
         a_star_search(grid, start, goal)
-            # draw_line_on_grid(canvas, int_i)
-            # int_i += 1
-            # timer.sleep
 
-        pause_button.configure(background = 'SystemButtonFace')
-        start_button.configure(background = 'green')
+        pause_button.configure(background='SystemButtonFace')
+        start_button.configure(background='green')
 
     def pause():
         global PAUSE_STATUS
         PAUSE_STATUS = True
 
-        pause_button.configure(background = 'red')
-        start_button.configure(background = 'SystemButtonFace')
-
+        pause_button.configure(background='red')
+        start_button.configure(background='SystemButtonFace')
 
     start_button = tk.Button(mf, text="Start", command=start, width=10)
     start_button.grid(row=1, column=1, sticky='w', padx=5, pady=5)
-
 
     pause_button = tk.Button(mf, text="Pause", command=pause, width=10)
     pause_button.grid(row=2, column=1, sticky='w', padx=5, pady=5)
@@ -241,22 +225,18 @@ def control_panel():
     box2.bind("<<ComboboxSelected>>", box_update2)
 
     def draw_line_on_grid(canvas, i):
-        if PAUSE_STATUS == False:
+        if PAUSE_STATUS is False:
             plot_line_segment(canvas, i, i, i, i+1)
             plot_line_segment(canvas, i, i+1, i+1, i+1)
 
             threading.Timer(int(box1.get()), draw_line_on_grid, [canvas, i+1]).start()
 
-
-    def printit():
-        if PAUSE_STATUS == False:
+    def print_something_for_testing():
+        if PAUSE_STATUS is False:
             print(int_i)
-            # print('speed = ', box1.get())
-            # int(box1.get())
 
-            threading.Timer(int(box1.get()), printit).start()
+            threading.Timer(int(box1.get()), print_something_for_testing).start()
             print( "doing stuff.......")
-
 
 
 root = tk.Tk()
@@ -271,7 +251,7 @@ left_frame.grid(column=0, row=0)
 right_frame = ttk.Frame(root, padding="3 3 12 12")
 right_frame.grid(column=1, row=0)
 
-canvas = tk.Canvas(left_frame, height=H+4*TR, width=W+4*TR, borderwidth=-TR, bg = bgc)
+canvas = tk.Canvas(left_frame, height=H+4*TR, width=W+4*TR, borderwidth=-TR, bg=bgc)
 canvas.pack(fill=tk.BOTH, expand=True)
 
 make_grid(canvas)
@@ -281,33 +261,21 @@ init_grid(canvas)
 plot_node(canvas, start, color=startc)
 plot_node(canvas, goal, color=goalc)
 
-mijn_kolom = []
-mijn_rij = []
+column_for_printing_in_cli = []
+row_for_printing_in_cli = []
 
 for row in grid:
-    mijn_rij = []
+    row_for_printing_in_cli = []
     for o in row:
         if o == -1:
-            mijn_rij.append('o')
+            row_for_printing_in_cli.append(' ')
         elif o == 'b':
-            mijn_rij.append('B')
-    mijn_kolom.append(mijn_rij)
+            row_for_printing_in_cli.append('B')
+    column_for_printing_in_cli.append(row_for_printing_in_cli)
 
-for row in mijn_kolom:
+for row in column_for_printing_in_cli:
     print(row)
 
 control_panel()
 
-
-
-
-
 root.mainloop()
-
-
-# scheduler = sched.scheduler(time.time, time.sleep)
-
-
-
-
-
