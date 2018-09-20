@@ -34,6 +34,9 @@ H  = W # height of grid
 TR = 10 # translate/move the grid, upper left is 10,10
 
 grid  = [[0 for x in range(SIZE)] for y in range(SIZE)]
+
+
+
 start = (0, 0)
 goal  = (SIZE-1, SIZE-1)
 
@@ -62,7 +65,7 @@ class PriorityQueue:
 
 def get_neighbors(board, position):
     neighbors = []
-    (row, col) = position
+    (row, col) = heapq.get(position)
     length = len(board) - 1
 
     positions = [(row-1, col), (row, col-1), (row, col+1), (row+1, col)]
@@ -126,6 +129,8 @@ def heuristic(a, b):
     (x2, y2) = b
     return abs(x1 - x2) + abs(y1 - y2)
 
+print(heuristic((0,0),(24,24)))
+
 
 def a_star_search(graph, start_for_search, goal_for_search):
     frontier = PriorityQueue()
@@ -141,15 +146,21 @@ def a_star_search(graph, start_for_search, goal_for_search):
         if current == goal_for_search:
             break
 
-        for next in graph.neighbors(current):
-            new_cost = cost_so_far[current] + graph.cost(current, next)
+        for next in get_neighbors(grid, current):
+        # for next in get_neighbors(graph)
+            new_cost = cost_so_far[current] + 1
             if next not in cost_so_far or new_cost < cost_so_far[next]:
                 cost_so_far[next] = new_cost
                 priority = new_cost + heuristic(goal_for_search, next)
                 frontier.put(next, priority)
+                plot_line_segment(canvas, current[0], current[1], came_from[[next][0]], came_from[[next][1]])
                 came_from[next] = current
 
+
     return came_from, cost_so_far
+
+start, goal = (0,0), (24,24)
+# print(a_star_search(grid, start, goal))
 
 
 int_i = 0
@@ -171,8 +182,9 @@ def control_panel():
         # s.run()
         # plot a sample path for demonstration
 
-        draw_line_on_grid(canvas, 0)
+        # draw_line_on_grid(canvas, 0)
 
+        a_star_search(grid, start, goal)
             # draw_line_on_grid(canvas, int_i)
             # int_i += 1
             # timer.sleep
