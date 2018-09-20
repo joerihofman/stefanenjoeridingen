@@ -5,6 +5,9 @@ import heapq
 import sched
 import time
 import threading
+
+
+
 import random
 
 #assuming a resulution of 1920 x 1080 = 16 : 9
@@ -22,6 +25,9 @@ PAUSE_STATUS = True
 PROB = 0.3  # probability blocking node
 SIZE = 25  # the nr of nodes=grid crossings in a row (or column)
 
+s = sched.scheduler(time.time, time.sleep)
+
+
 # global var: pixel sizes
 CELL = 35  # size of cell/square in pixels
 W = (SIZE-1) * CELL  # width of grid in pixels
@@ -32,7 +38,6 @@ grid = [[0 for x in range(SIZE)] for y in range(SIZE)]
 start = (0, 0)
 goal = (SIZE-1, SIZE-1)
 
-s = sched.scheduler(time.time, time.sleep)
 
 class PriorityQueue:
     # to be use in the A* algorithm
@@ -59,6 +64,7 @@ class PriorityQueue:
 def get_neighbors(board, position):
     neighbors = []
     length = len(board) - 1
+    print(position)
 
     (row, col) = position
 
@@ -109,6 +115,10 @@ def init_grid(c):
 def plot_line_segment(c, x0, y0, x1, y1):
     c.create_line(x0*CELL+TR, y0*CELL+TR, x1*CELL+TR, y1*CELL+TR, fill=pathc, width=2)
 
+def delete_line_segment(c, x0, y0, x1, y1):
+    c.delete_line()
+
+
 
 def plot_node(c, node, color):
     # size of (red) rectangle is 8 by 8
@@ -126,6 +136,33 @@ def heuristic(a, b):
 
 print(heuristic((0,0),(24,24)))
 
+def dijkstra_search(graph, start, goal):
+    frontier = PriorityQueue()
+    frontier.put(start, 0)
+    came_from = {}
+    cost_so_far = {}
+    came_from[start] = None
+    cost_so_far[start] = 0
+
+    while not frontier.empty():
+        current = frontier.get()
+
+        if current == goal:
+            break
+
+        for next in get_neighbors(grid, current):
+            new_cost = cost_so_far[current] + 1
+            if next not in cost_so_far or new_cost < cost_so_far[next]:
+                cost_so_far[next] = new_cost
+                priority = new_cost
+                frontier.put(next, priority)
+                time.sleep(1)
+                plot_line_segment(canvas, current[0], current[1], next[0], next[1])
+                canvas.update()
+                came_from[next] = current
+
+    return came_from, cost_so_far
+
 
 def a_star_search(graph, start_for_search, goal_for_search):
     frontier = PriorityQueue()
@@ -137,20 +174,38 @@ def a_star_search(graph, start_for_search, goal_for_search):
 
     while not frontier.empty():
         current = frontier.get()
-        print(current.__str__)
+        # print(current.__str__)
 
         if current == goal_for_search:
             break
-
+        print(current)
         for next in get_neighbors(grid, current):
         # for next in get_neighbors(graph)
+        # threading.Timer(5.0, None)
             new_cost = cost_so_far[current] + 1
+
             if next not in cost_so_far or new_cost < cost_so_far[next]:
                 cost_so_far[next] = new_cost
                 priority = new_cost + heuristic(goal_for_search, next)
                 frontier.put(next, priority)
-                plot_line_segment(canvas, current[0], current[1], came_from[[next][0]], came_from[[next][1]])
+                print('positie 1', current[0])
+                print(next[0])
+                print(next[1])
+                # print('neighbor', next[[0][0]])
+                # print('neighbory', next[[0][1]])
+                # print('first positionx: ', current[[0][0]])
+                # print('first positiony: ', current[[0][1]])
+                # print('next positionx :', next[[0][0]])
+                # print('next positiony :', next[[0][1]])
+
+                # print(next)
+                time.sleep(1)
+                plot_line_segment(canvas, current[0], current[1], next[0], next[1])
+                canvas.update()
                 came_from[next] = current
+            else:
+                print('delete line')
+
 
     return came_from, cost_so_far
 
@@ -171,9 +226,25 @@ def control_panel():
         global int_i
         PAUSE_STATUS = False
 
-        draw_line_on_grid(canvas, 0)
+        # draw_line_on_grid(canvas, 0)
 
-        a_star_search(grid, start, goal)
+        # a_star_search(grid, (0,0), (24,24))
+
+        dijkstra_search(grid, (0,0), (24,24))
+        # s = sched.scheduler(time.time, time
+        # .sleep)
+
+        # s.enter(3, 1, draw_line_on_grid(canvas, int_i))
+        # s.run()
+        # plot a sample path for demonstration
+
+        # draw_line_on_grid(canvas, 0)
+        # print(start)
+        # print(goal)
+        # a_star_search(grid, (0,0), (24,24))
+            # draw_line_on_grid(canvas, int_i)
+            # int_i += 1
+            # timer.sleep
 
         pause_button.configure(background='SystemButtonFace')
         start_button.configure(background='green')
@@ -234,9 +305,12 @@ def control_panel():
     def print_something_for_testing():
         if PAUSE_STATUS is False:
             print(int_i)
+            # print('speed = ', box1.get())
+            # int(box1.get())
 
             threading.Timer(int(box1.get()), print_something_for_testing).start()
             print( "doing stuff.......")
+
 
 
 root = tk.Tk()
@@ -251,7 +325,7 @@ left_frame.grid(column=0, row=0)
 right_frame = ttk.Frame(root, padding="3 3 12 12")
 right_frame.grid(column=1, row=0)
 
-canvas = tk.Canvas(left_frame, height=H+4*TR, width=W+4*TR, borderwidth=-TR, bg=bgc)
+canvas = tk.Canvas(left_frame, height=H+4*TR, width=W+4*TR, borderwidth=-TR, bg = bgc)
 canvas.pack(fill=tk.BOTH, expand=True)
 
 make_grid(canvas)
@@ -278,4 +352,16 @@ for row in column_for_printing_in_cli:
 
 control_panel()
 
+
+
+
+
 root.mainloop()
+
+
+# scheduler = sched.scheduler(time.time, time.sleep)
+
+
+
+
+

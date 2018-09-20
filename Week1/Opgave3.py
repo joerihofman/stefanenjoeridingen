@@ -66,7 +66,6 @@ class Board:
                     rcol = path[-1][1]
                     self.change_number(rrow, rcol, 0)
                     self.print_board()
-
                     return
             else:
                 self.change_number(row, col, number)
