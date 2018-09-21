@@ -100,12 +100,9 @@ def print_states(all_paths):
 
             string = leftside + '||' + rightside
             print(string)
-initial_state = {'goat': 'left', 'wolf': 'left', 'farmer': 'left', 'cabbage': 'left'}
 
-# initial_state = {}
-# initial_state['farmer'] = 'left'
-# for e in entity:
-#     initial_state[e] = 'left'
+
+initial_state = {'goat': 'left', 'wolf': 'left', 'farmer': 'left', 'cabbage': 'left'}
 
 print(initial_state)
 
