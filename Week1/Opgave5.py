@@ -24,21 +24,19 @@ class PriorityQueue:
     def get(self):
         return heapq.heappop(self.elements)[1]
 
-
-grid = ([[2, 1, 3],
-        [4, 5, 0],
-        [7, 8, 6]])
-
-board = "8 6 7 2 5 4 3 0 1"
-
-goal = "1 2 3 4 5 6 7 8 0"
-
-neighbor_string = '1 2 3 4 0 5 6 7 8'
+#
+# grid = ([[2, 1, 3],
+#         [4, 5, 0],
+#         [7, 8, 6]])
 
 
 def get_matrix(string):
     a = list(map(int, string.split()))
-    matrix = np.reshape(a, (-1, 3))
+
+    length = len(a)
+    nrcols = math.sqrt(length)
+
+    matrix = np.reshape(a, (-1, int(nrcols)))
     return matrix
 
 
@@ -87,17 +85,10 @@ def get_neighbor(node):
                 #   revert swap values
                 grid[temp_row][temp_col] = swap_value
                 grid[row][col] = 0
-
-        print_board(grid)
-        print('')
-        for i in neighbors:
-            print_board(get_matrix(i))
-            print('')
-
         return neighbors
 
 
-variable = get_neighbor(neighbor_string)
+# variable = get_neighbor(neighbor_string)
 
 
 def heuristic(node):
@@ -171,16 +162,26 @@ def dijkstra(start_for_search, goal_for_search):
 
     return came_from, cost_so_far
 
+board = "8 6 7 2 5 4 3 0 1"
+
+goal = "1 2 3 4 5 6 7 8 0"
+
+neighbor_string = '1 2 3 4 0 5 6 7 8'
+
+
+
+
+print(get_matrix(board))
+
+
+
+
+# camefrom2, cost_so_far2 = a_star_search(board, goal)
+
+# dijkstra(board, goal)
 
 
 
 
 
-
-camefrom2, cost_so_far2 = a_star_search(board, goal)
-
-dijkstra(board, goal)
-
-
-
-print(camefrom2)
+# print(camefrom2)
