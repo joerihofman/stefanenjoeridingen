@@ -172,6 +172,8 @@ neighbor_string = '1 2 3 4 0 5 6 7 8'
 
 print(get_matrix(board))
 
+came_from, cost_so_far = a_star_search(board, goal)
+
 
 
 
