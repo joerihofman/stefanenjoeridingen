@@ -34,8 +34,7 @@ def goal_reach(state):
             state_of('wolf', state) == 'right' and
             state_of('cabbage',state) == 'right')
 
-# Checks if child is a safe state to move into, and if it is, it adds
-# it to the list of states.
+
 def check_add_child(child, list_states):
     if safe_state(child):
         list_states.append(child)
@@ -103,7 +102,6 @@ def print_states(all_paths):
             print(string)
 
 
-# Initialization of the global variables
 initial_state = {}
 initial_state['man'] = 'left'
 for e in entity:
@@ -112,12 +110,12 @@ for e in entity:
 print(dfs(initial_state, visited))
 
 
-print("find a path")
+# print("find a path")
 
 
 
 
-# print(find_all_paths(initial_state))
+
 print("finding all paths")
 all_paths = find_all_paths(initial_state)
 
