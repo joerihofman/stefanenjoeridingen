@@ -10,7 +10,7 @@ def state_of(who, state):
         return False
 
 def safe_state(state):
-    if state_of('man', state) == state_of('goat', state):
+    if state_of('farmer', state) == state_of('goat', state):
         return True
     elif state_of('goat', state) == state_of('wolf', state):
         return False
@@ -29,7 +29,7 @@ def move(who, state):
 def goal_reach(state):
     if not state:
         return False
-    return (state_of('man', state) == 'right' and
+    return (state_of('farmer', state) == 'right' and
             state_of('goat', state) == 'right' and
             state_of('wolf', state) == 'right' and
             state_of('cabbage',state) == 'right')
@@ -44,13 +44,13 @@ def expand_states(state):
     children = []
     child = state.copy()
     # the man can also move alone
-    move('man', child)
+    move('farmer', child)
     check_add_child(child, children)
     for ent in entity:
         # Move one object on the same side as the man
-        if state_of(ent, state) == state_of('man', state):
+        if state_of(ent, state) == state_of('farmer', state):
             child = state.copy()
-            move('man', child)
+            move('farmer', child)
             move(ent, child)
             check_add_child(child, children)
     return children
@@ -100,12 +100,14 @@ def print_states(all_paths):
 
             string = leftside + '||' + rightside
             print(string)
+initial_state = {'goat': 'left', 'wolf': 'left', 'farmer': 'left', 'cabbage': 'left'}
 
+# initial_state = {}
+# initial_state['farmer'] = 'left'
+# for e in entity:
+#     initial_state[e] = 'left'
 
-initial_state = {}
-initial_state['man'] = 'left'
-for e in entity:
-    initial_state[e] = 'left'
+print(initial_state)
 
 print(dfs(initial_state, visited))
 
