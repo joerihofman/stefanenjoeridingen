@@ -162,8 +162,8 @@ def a_star_search(start_for_search, goal_for_search):
     came_from[start_for_search] = None
     cost_so_far[start_for_search] = 0
 
-    while not frontier.empty():
-        current = frontier.get()
+    while not queue.empty():
+        current = queue.get()
 
         if current == goal_for_search:
             break

@@ -167,14 +167,26 @@ goal = "1 2 3 4 5 6 7 8 0"
 
 neighbor_string = '1 2 3 4 0 5 6 7 8'
 
+four_board = '1 5 10 9 15 0 4 14 12 2 8 13 11 7 3 6'
+
+four_goal = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0'
+
 
 
 
 print(get_matrix(board))
 
-came_from, cost_so_far = a_star_search(board, goal)
+# came_from, cost_so_far = a_star_search(board, goal)
 
 
+
+# print(get_matrix(four_board))
+
+# print('heuristic:', heuristic(four_board))
+
+came_from2_, cost_so_far = a_star_search(board, goal)
+
+# print(heuristic(four_board))
 
 
 # camefrom2, cost_so_far2 = a_star_search(board, goal)
