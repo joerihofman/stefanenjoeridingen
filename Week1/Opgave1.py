@@ -30,9 +30,9 @@ def goal_reach(state):
     if not state:
         return False
     return (state_of('man', state) == 'right' and
-            state_of('goat', state)=='right' and
-            state_of('wolf', state)=='right' and
-            state_of('cabbage',state)=='right')
+            state_of('goat', state) == 'right' and
+            state_of('wolf', state) == 'right' and
+            state_of('cabbage',state) == 'right')
 
 # Checks if child is a safe state to move into, and if it is, it adds
 # it to the list of states.
