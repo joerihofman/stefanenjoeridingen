@@ -24,11 +24,6 @@ class PriorityQueue:
     def get(self):
         return heapq.heappop(self.elements)[1]
 
-#
-# grid = ([[2, 1, 3],
-#         [4, 5, 0],
-#         [7, 8, 6]])
-
 
 def get_matrix(string):
     a = list(map(int, string.split()))
@@ -85,9 +80,6 @@ def get_neighbor(node):
                 grid[temp_row][temp_col] = swap_value
                 grid[row][col] = 0
         return neighbors
-
-
-# variable = get_neighbor(neighbor_string)
 
 
 def heuristic(node):
@@ -161,6 +153,7 @@ def dijkstra(start_for_search, goal_for_search):
 
     return came_from, cost_so_far
 
+
 board = "8 6 7 2 5 4 3 0 1"
 
 goal = "1 2 3 4 5 6 7 8 0"
@@ -172,29 +165,6 @@ four_board = '1 5 10 9 15 0 4 14 12 2 8 13 11 7 3 6'
 four_goal = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0'
 
 
-
-
 print(get_matrix(board))
 
-# came_from, cost_so_far = a_star_search(board, goal)
-
-
-
-# print(get_matrix(four_board))
-
-# print('heuristic:', heuristic(four_board))
-
 came_from2_, cost_so_far = a_star_search(board, goal)
-
-# print(heuristic(four_board))
-
-
-# camefrom2, cost_so_far2 = a_star_search(board, goal)
-
-# dijkstra(board, goal)
-
-
-
-
-
-# print(camefrom2)
