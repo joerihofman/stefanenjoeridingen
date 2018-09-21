@@ -41,7 +41,7 @@ def get_matrix(string):
 
 
 def get_string(matrix):
-    string = ""
+    string = ''
     for row in matrix:
         string += ' '.join(str(e) for e in row)
         string += ' '
@@ -62,7 +62,6 @@ def get_empty_location(grid):
 
 def get_neighbor(node):
         neighbors = []
-
 
         grid = get_matrix(node)
         length = len(grid) - 1
