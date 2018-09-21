@@ -88,6 +88,12 @@ def get_neighbor(node):
                 grid[temp_row][temp_col] = swap_value
                 grid[row][col] = 0
 
+        print_board(grid)
+        print('')
+        for i in neighbors:
+            print_board(get_matrix(i))
+            print('')
+
         return neighbors
 
 
@@ -104,26 +110,27 @@ def heuristic(node):
                 target_x = math.floor((value - 1) / len(grid))   # expected x value in matrix
                 target_y = (value - 1) % len(grid)               # expected y value in matrix
 
-                dx = row - target_x                              # expected x value in matrix
-                dy = col - target_y                              # expected y value in matrix
+                dx = row - target_x                              # optimal distance x value in matrix
+                dy = col - target_y                              # optimal distance y value in matrix
                 manhatten_distance += (abs(dx) + abs(dy))
     return manhatten_distance
 
 
 def a_star_search(start_for_search, goal_for_search):
-    frontier = PriorityQueue()
-    frontier.put(start_for_search, 0)
+    queue = PriorityQueue()
+    queue.put(start_for_search, 0)
     came_from = {}
     cost_so_far = {}
     came_from[start_for_search] = None
     cost_so_far[start_for_search] = 0
 
-    while not frontier.empty():
-        current = frontier.get()
+    while not queue.empty():
+        current = queue.get()
 
         if current == goal_for_search:
             string = get_matrix(current)
             print_board(string)
+            print('de nr of states = ', cost_so_far[current])
             break
         for next in get_neighbor(current):
 
@@ -132,7 +139,7 @@ def a_star_search(start_for_search, goal_for_search):
             if next not in cost_so_far or new_cost < cost_so_far[next]:
                 cost_so_far[next] = new_cost
                 priority = new_cost + heuristic(next)
-                frontier.put(next, priority)
+                queue.put(next, priority)
                 came_from[next] = current
 
     return came_from, cost_so_far
@@ -150,6 +157,8 @@ def dijkstra(start_for_search, goal_for_search):
         current = frontier.get()
 
         if current == goal_for_search:
+            print_board(get_matrix(current))
+            print('nr of states = ', cost_so_far[current])
             break
         for next in get_neighbor(current):
             new_cost = cost_so_far[current] + 1
@@ -163,4 +172,15 @@ def dijkstra(start_for_search, goal_for_search):
     return came_from, cost_so_far
 
 
+
+
+
+
+
 camefrom2, cost_so_far2 = a_star_search(board, goal)
+
+dijkstra(board, goal)
+
+
+
+print(camefrom2)

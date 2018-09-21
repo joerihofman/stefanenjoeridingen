@@ -127,15 +127,15 @@ print(heuristic((0, 0), (24, 24)))
 
 
 def dijkstra_search(start, goal):
-    frontier = PriorityQueue()
-    frontier.put(start, 0)
+    queue = PriorityQueue()
+    queue.put(start, 0)
     came_from = {}
     cost_so_far = {}
     came_from[start] = None
     cost_so_far[start] = 0
 
-    while not frontier.empty():
-        current = frontier.get()
+    while not queue.empty():
+        current = queue.get()
 
         if current == goal:
             break
@@ -145,7 +145,7 @@ def dijkstra_search(start, goal):
             if next not in cost_so_far or new_cost < cost_so_far[next]:
                 cost_so_far[next] = new_cost
                 priority = new_cost
-                frontier.put(next, priority)
+                queue.put(next, priority)
                 time.sleep(0.05)
                 plot_line_segment(canvas, current[0], current[1], next[0], next[1])
                 canvas.update()
@@ -155,8 +155,8 @@ def dijkstra_search(start, goal):
 
 
 def a_star_search(start_for_search, goal_for_search):
-    frontier = PriorityQueue()
-    frontier.put(start_for_search, 0)
+    queue = PriorityQueue()
+    queue.put(start_for_search, 0)
     came_from = {}
     cost_so_far = {}
     came_from[start_for_search] = None
@@ -174,7 +174,7 @@ def a_star_search(start_for_search, goal_for_search):
             if next not in cost_so_far or new_cost < cost_so_far[next]:
                 cost_so_far[next] = new_cost
                 priority = new_cost + heuristic(goal_for_search, next)
-                frontier.put(next, priority)
+                queue.put(next, priority)
 
                 time.sleep(0.05)
                 plot_line_segment(canvas, current[0], current[1], next[0], next[1])
