@@ -40,42 +40,31 @@ def tour_length(tour):
 def make_cities(n, width=1000, height=1000):
     # Make a set of n cities, each with random coordinates within a rectangle (width x height).
 
-    random.seed(10)  # the current system time is used as a seed
+    random.seed(66)  # the current system time is used as a seed
     # note: if we use the same seed, we get the same set of cities
 
     return frozenset(City(random.randrange(width), random.randrange(height))
                      for c in range(n))
 
-def nearest_neighbors(cities):
-    tour = []
-    min_value = None
 
 
-    start = next(iter(cities))
-    tour.append(start)
-    while len(tour) < len(cities):
-
-    # rest = cities.pop(start)
+def neirest_neighbors(cities, path=None, start=None):
+    if path is None and start is None:
+        start = next(iter(cities))
+        path = [start]
+    if len(cities) == len(path):
+        return path
+    else:
+        min_value = None
         for i in cities:
-            if i not in tour:
+            if i not in path:
                 if not min_value:
                     min_value = i
                 elif distance(start, i) < distance(start, min_value):
                     min_value = i
-        tour.append(min_value)
+        path.append(min_value)
         start = min_value
-        min_value = None
-
-    return tour
-
-
-
-    # print(cities[0])
-
-    # for i in cities:
-        # print(i)
-
-
+        return neirest_neighbors(cities, path[:], start)
 
 
 def plot_tour(tour): 
@@ -98,14 +87,36 @@ def plot_tsp(algorithm, cities):
     plot_tour(tour)
 
 
-plot_tsp(nearest_neighbors, make_cities(100))
+plot_tsp(neirest_neighbors, make_cities(100))
 
-# print(try_all_tours(make_cities(10)))
+'''
+a)
+seed = 66
 
-# plot_tsp(nearest_neighbors, make_cities(10))
+try_all_tours:
+10 city tour with length 2683.0 in 4.782 secs for try_all_tours
+
+neirest_neighbors:
+10 city tour with length 3166.9 in 0.000 secs for neirest_neighbors
+
+=(2683−3166.9/(2683+3166.9/2))×100
+=(−483.9/5849.9/2)×100
+=(483.9/2924.95)×100
+=0.165439×100
+=16.5439%difference
+'''
+
+'''
+b)
+100 city tour with length 10147.1 in 0.028 secs for neirest_neighbors
+'''
 
 
-print(nearest_neighbors(make_cities(10)))
-print("commit changes")
+# plot_tsp(neirest_neighbors, make_cities(100))
 
-# print(try_all_tours(make_cities(10)))
+# b)    100 city tour length 10219.2  in 0.019 seconden
+
+
+
+# plot_tsp(try_all_tours, make_cities(10))
+
