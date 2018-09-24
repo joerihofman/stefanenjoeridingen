@@ -40,11 +40,42 @@ def tour_length(tour):
 def make_cities(n, width=1000, height=1000):
     # Make a set of n cities, each with random coordinates within a rectangle (width x height).
 
-    random.seed()  # the current system time is used as a seed
+    random.seed(10)  # the current system time is used as a seed
     # note: if we use the same seed, we get the same set of cities
 
     return frozenset(City(random.randrange(width), random.randrange(height))
                      for c in range(n))
+
+def nearest_neighbors(cities):
+    tour = []
+    min_value = None
+
+
+    start = next(iter(cities))
+    tour.append(start)
+    while len(tour) < len(cities):
+
+    # rest = cities.pop(start)
+        for i in cities:
+            if i not in tour:
+                if not min_value:
+                    min_value = i
+                elif distance(start, i) < distance(start, min_value):
+                    min_value = i
+        tour.append(min_value)
+        start = min_value
+        min_value = None
+
+    return tour
+
+
+
+    # print(cities[0])
+
+    # for i in cities:
+        # print(i)
+
+
 
 
 def plot_tour(tour): 
@@ -67,4 +98,14 @@ def plot_tsp(algorithm, cities):
     plot_tour(tour)
 
 
-plot_tsp(try_all_tours, make_cities(10))
+plot_tsp(nearest_neighbors, make_cities(100))
+
+# print(try_all_tours(make_cities(10)))
+
+# plot_tsp(nearest_neighbors, make_cities(10))
+
+
+print(nearest_neighbors(make_cities(10)))
+print("commit changes")
+
+# print(try_all_tours(make_cities(10)))
