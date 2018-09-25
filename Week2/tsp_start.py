@@ -67,6 +67,40 @@ def neirest_neighbors(cities, path=None, start=None):
         return neirest_neighbors(cities, path[:], start)
 
 
+def lineIntersection(pointA, pointB, pointC, pointD):
+
+    print(pointA)
+    print(pointB)
+    print(pointC)
+    print(pointD)
+
+    a1 = pointB.y - pointA.y
+    b1 = pointA.x - pointB.x
+    c1 = a1*(pointA.x) + b1*(pointA.y)
+
+    a2 = pointD.y - pointC.y
+    b2 = pointC.x - pointD.x
+    c2 = a2*(pointC.x) + b2*(pointD.y)
+
+    determinant = (a1*b2) - (a2*b1)
+    print(determinant)
+
+    if determinant == 0:
+        print('reeeeeeeeeeeeeeeeeeeeeeee')
+    else:
+
+        print('er is een intersectie')
+
+
+
+tour = neirest_neighbors(make_cities(10))
+
+
+
+
+lineIntersection(tour[0], tour[1], tour[2], tour[3])
+
+
 def plot_tour(tour): 
     # Plot the cities as circles and the tour as lines between them.
     points = list(tour) + [tour[0]]
@@ -87,8 +121,11 @@ def plot_tsp(algorithm, cities):
     plot_tour(tour)
 
 
-plot_tsp(neirest_neighbors, make_cities(100))
 
+
+# plot_tsp(neirest_neighbors, make_cities(100))
+
+plot_tsp(neirest_neighbors, make_cities(10))
 '''
 a)
 seed = 66
