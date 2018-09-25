@@ -114,13 +114,10 @@ class Strategies:
         random_move = random.SystemRandom().choice(possible_moves)
         if random_move == "roll":
             if Moves.hold_at_x(game, game.hold_at_20):
-                print(game.current_player.__str__() + " has chosen hold all by itself")
                 Moves.hold(game)
             else:
-                print(game.current_player.__str__() + " has chosen roll")
                 Moves.roll(game, Strategies.roll_dice())
         elif random_move == "hold":
-            print(game.current_player.__str__() + " has chosen hold")
             Moves.hold(game)
 
     @staticmethod
@@ -136,6 +133,47 @@ class Strategies:
                 Moves.hold(game)
             else:
                 Moves.roll(game, Strategies.roll_dice())
+
+    @staticmethod
+    def legal_actions(game):
+        if game.pending_score == 0:
+            return "roll"
+        else:
+            return "hold"
+
+    @staticmethod
+    def win_probability(game):
+        possible_moves = ['roll', 'hold']
+        if game.current_player.current_score + game.pending_score >= game.goal_score:
+            return 1
+        elif game.other_player.current_score >= game.goal_score:
+            return 0
+        else:
+            return max(Strategies.ev_action(game, Strategies.legal_actions(), Strategies.win_probability) for action in possible_moves)
+    # The value of a state: the probability that an optimal player whose turn it is
+    # can win from the current state.
+
+    @staticmethod
+    def best_action(game):
+        # return the optimal action for a state
+        # define key ev (exp. value) for max function
+        def ev(action): return Strategies.ev_action(game, action, Strategies.win_probability(game))
+        return max(Strategies.legal_actions(game), key=ev)
+
+    @staticmethod
+    def ev_action(game, action, p_win):
+        """The expected value of an action in this state.
+        p_win is the utility function, i.e. the probability of winning: 1 point for winning and 0 points for loosing
+        We will look into the possible future, consider all legal actions, until the goal is reached
+        """
+        if action == "hold":
+            # if we hold, our opponent will move, our probability of winning is 1 - p_win(opponent)
+            return 1 - p_win(Moves.hold(game))
+        if action == "roll":
+            # if d==1: it's a pig-out, our opponent will move, our probability of winning is 1 - p_win(opponent)
+            # if d >1: get p_win for each value of d and calculate average
+            return (1 - p_win(Moves.roll(game, 1)) + sum(p_win(Moves.roll(game, Strategies.roll_dice())) for Strategies.roll_dice() in (2,3,4,5,6))) / 6.0
+        raise ValueError
 
 
 new_game = GameState(Players("me"), Players("you"))
