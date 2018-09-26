@@ -139,21 +139,12 @@ def intersection(pA, pB, pC, pD):
         x = Dx / D
         y = Dy / D
         if pA.x <= x <= pB.x or pB.x <= x <= pA.x and pC.y <= y <= pD.y or pD.y <= y <= pC.y:
-            print('reeeeeeeeeeeeeeeeeeeeee')
+            print('er is een crossing hooooor')
             return x,y
     else:
+        print('lijnen lopen paralel')
         return False
 
-
-
-
-# print(intersection(line(tour[0], tour[1]), line(tour[2], tour[3])))
-
-# print(intersection(line(tour[0], tour[1]), line(tour[5], tour[6])))
-
-print(intersection(tour[0], tour[1], tour[1], tour[2]))
-
-# line(tour[0], tour[1], tour[3], tour[4])
 
 
 def plot_tour(tour): 
