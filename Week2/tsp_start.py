@@ -85,7 +85,7 @@ def lineIntersection(pointA, pointB, pointC, pointD):
     determinant = (a1*b2) - (a2*b1)
     print(determinant)
 
-    if determinant == 0:
+    if determinant < 0:
         print('reeeeeeeeeeeeeeeeeeeeeeee')
     else:
 
@@ -98,7 +98,62 @@ tour = neirest_neighbors(make_cities(10))
 
 
 
-lineIntersection(tour[0], tour[1], tour[2], tour[3])
+# lineIntersection(tour[0], tour[1], tour[8], tour[9])
+
+
+def line(a, b):
+    A = (a.y - b.y)
+    B = (b.x - a.x)
+    C = ((a.x*b.y) - (b.x * a.y))
+    return A, B, -C
+
+
+def intersection(L1, L2):
+    D  = L1[0] * L2[1] - L1[1] * L2[0]
+    Dx = L1[2] * L2[1] - L1[1] * L2[2]
+    Dy = L1[0] * L2[2] - L1[2] * L2[0]
+    if D != 0:
+        x = Dx / D
+        y = Dy / D
+
+
+        return x,y
+    else:
+        return False
+
+def intersection(pA, pB, pC, pD):
+
+    def line(a, b):
+        A = (a.y - b.y)
+        B = (b.x - a.x)
+        C = ((a.x*b.y) - (b.x * a.y))
+        return A, B, -C
+
+    line1 = line(pA, pB)
+    line2 = line(pC, pD)
+
+    D  = line1[0] * line2[1] - line1[1] * line2[0]
+    Dx = line1[2] * line2[1] - line1[1] * line2[2]
+    Dy = line1[0] * line2[2] - line1[2] * line2[0]
+    if D != 0:
+        x = Dx / D
+        y = Dy / D
+        if pA.x <= x <= pB.x or pB.x <= x <= pA.x and pC.y <= y <= pD.y or pD.y <= y <= pC.y:
+            print('reeeeeeeeeeeeeeeeeeeeee')
+            return x,y
+    else:
+        return False
+
+
+
+
+# print(intersection(line(tour[0], tour[1]), line(tour[2], tour[3])))
+
+# print(intersection(line(tour[0], tour[1]), line(tour[5], tour[6])))
+
+print(intersection(tour[0], tour[1], tour[1], tour[2]))
+
+# line(tour[0], tour[1], tour[3], tour[4])
 
 
 def plot_tour(tour): 
