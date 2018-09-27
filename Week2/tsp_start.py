@@ -4,9 +4,7 @@ import time
 import itertools
 import math
 from collections import namedtuple
-import sys
 
-# sys.setrecursionlimit(100000)
 
 # Based on Peter Norvig's IPython Notebook on the TSP
 
@@ -70,10 +68,6 @@ def neirest_neighbors(cities, path=None, start=None):
         return neirest_neighbors(cities, path[:], start)
 
 
-tour = neirest_neighbors(make_cities(100))
-
-
-
 def intersection(pA, pB, pC, pD):
 
     variables = [pA, pB, pC, pD]
@@ -122,13 +116,6 @@ def rc(tour):
     else:
         return tour
 
-
-
-
-
-
-
-
 def plot_tour(tour): 
     # Plot the cities as circles and the tour as lines between them.
     points = list(tour) + [tour[0]]
@@ -145,26 +132,23 @@ def plot_tsp(algorithm, cities):
     t1 = time.clock()
     print("{} city tour with length {:.1f} in {:.3f} secs for {}"
           .format(len(tour), tour_length(tour), t1 - t0, algorithm.__name__))
+
+
+
+
+    tour = rc(tour)
+
+    print("{} city tour with length {:.1f}"
+          .format(len(tour), tour_length(tour)))
+
     print("Start plotting ...")
     plot_tour(tour)
 
 
-plot_tour(tour)
 
-rc(tour)
-
-plot_tour(tour)
+plot_tsp(neirest_neighbors, make_cities(100))
 
 
-
-
-# plot_tour(tour)
-
-
-
-# plot_tsp(neirest_neighbors, make_cities(100))
-
-# plot_tsp(neirest_neighbors, make_cities(10))
 '''
 a)
 seed = 66
