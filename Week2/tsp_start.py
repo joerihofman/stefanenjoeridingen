@@ -1,29 +1,26 @@
+from collections import namedtuple
+
 import matplotlib.pyplot as plt
 import random
 import time
 import itertools
 import math
-from collections import namedtuple
 
-
-# Based on Peter Norvig's IPython Notebook on the TSP
 
 City = namedtuple('City', 'x y')
-# c1 = City(4,0)
-# c2 = City(0,3)
 
 
-def distance(A, B):
-    return math.hypot(A.x - B.x, A.y - B.y)
+def distance(point_a, point_b):
+    return math.hypot(point_a.x - point_b.x, point_a.y - point_b.y)
 
 
 def try_all_tours(cities):
     "Generate and test all possible tours of the cities and choose the shortest tour."
-    tours = alltours(cities)
+    tours = all_tours(cities)
     return min(tours, key=tour_length)
 
 
-def alltours(cities):
+def all_tours(cities):
     # Return a list of tours (a list of lists), each tour a permutation of cities, but
     # each one starting with the same city.
     start = next(iter(cities))  # cities is a set, sets don't support indexing
@@ -48,8 +45,7 @@ def make_cities(n, width=1000, height=1000):
                      for c in range(n))
 
 
-
-def neirest_neighbors(cities, path=None, start=None):
+def nearest_neighbors(cities, path=None, start=None):
     if path is None and start is None:
         start = next(iter(cities))
         path = [start]
@@ -59,18 +55,15 @@ def neirest_neighbors(cities, path=None, start=None):
         min_value = None
         for i in cities:
             if i not in path:
-                if not min_value:
-                    min_value = i
-                elif distance(start, i) < distance(start, min_value):
+                if not min_value or distance(start, i) < distance(start, min_value):
                     min_value = i
         path.append(min_value)
         start = min_value
-        return neirest_neighbors(cities, path[:], start)
+        return nearest_neighbors(cities, path[:], start)
 
 
-def intersection(pA, pB, pC, pD):
-
-    variables = [pA, pB, pC, pD]
+def intersection(city_1, city_2, city_3, city_4):
+    variables = [city_1, city_2, city_3, city_4]
     if len(set(variables)) == len(variables):
 
         def line(a, b):
@@ -79,8 +72,8 @@ def intersection(pA, pB, pC, pD):
             C = ((a.x*b.y) - (b.x * a.y))
             return A, B, -C
 
-        line1 = line(pA, pB)
-        line2 = line(pC, pD)
+        line1 = line(city_1, city_2)
+        line2 = line(city_3, city_4)
 
         D = line1[0] * line2[1] - line1[1] * line2[0]
         Dx = line1[2] * line2[1] - line1[1] * line2[2]
@@ -88,33 +81,36 @@ def intersection(pA, pB, pC, pD):
         if D != 0:
             x = Dx / D
             y = Dy / D
-            if min(pA.x, pB.x) <= x <= max(pB.x, pA.x) and min(pC.x, pD.x) <= x <= max(pD.x, pC.x) and \
-                                    min(pA.y, pB.y) <= y <= max(pB.y, pA.y) and min(pC.y, pD.y) <= y <= max(pD.y, pC.y):
+
+            if min(city_1.x, city_2.x) <= x <= max(city_2.x, city_1.x) and min(city_3.x, city_4.x) <= x <= max(city_4.x, city_3.x) and \
+                                    min(city_1.y, city_2.y) <= y <= max(city_2.y, city_1.y) and min(city_3.y, city_4.y) <= y <= max(city_4.y, city_3.y):
                 return True
+
         else:
-            # print('lijnen lopen paralel')
             return False
+
     else:
-        # print('waarden met de zelfde punten gevonden')
         return False
 
-def opt_2(tour, i, k):
+
+def two_opt_alg(tour, i, k):
     tour[i:k] = reversed(tour[i:k])
     return tour
 
 
-def rc(tour):
+def remove_crossings(tour):
     changes = False
     for i in range(len(tour)):
         for j in range(len(tour)):
             # print(j)
             if intersection(tour[i], tour[i-1], tour[j], tour[j-1]):
-                tour = opt_2(tour, i, j)
+                tour = two_opt_alg(tour, i, j)
                 changes = True
-    if changes == True:
-        return rc(tour)
+    if changes:
+        return remove_crossings(tour)
     else:
         return tour
+
 
 def plot_tour(tour): 
     # Plot the cities as circles and the tour as lines between them.
@@ -133,10 +129,7 @@ def plot_tsp(algorithm, cities):
     print("{} city tour with length {:.1f} in {:.3f} secs for {}"
           .format(len(tour), tour_length(tour), t1 - t0, algorithm.__name__))
 
-
-
-
-    tour = rc(tour)
+    tour = remove_crossings(tour)
 
     print("{} city tour with length {:.1f}"
           .format(len(tour), tour_length(tour)))
@@ -145,8 +138,7 @@ def plot_tsp(algorithm, cities):
     plot_tour(tour)
 
 
-
-plot_tsp(neirest_neighbors, make_cities(100))
+plot_tsp(nearest_neighbors, make_cities(100))
 
 
 '''
@@ -170,13 +162,3 @@ neirest_neighbors:
 b)
 100 city tour with length 10147.1 in 0.028 secs for neirest_neighbors
 '''
-
-
-# plot_tsp(neirest_neighbors, make_cities(100))
-
-# b)    100 city tour length 10219.2  in 0.019 seconden
-
-
-
-# plot_tsp(try_all_tours, make_cities(10))
-
