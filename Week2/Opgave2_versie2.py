@@ -1,7 +1,6 @@
 import random
 import sys
 
-
 sys.setrecursionlimit(1000000)
 
 possible_moves = ['roll', 'hold']
@@ -18,20 +17,13 @@ class Memoize:
 
     def __call__(self, *args):
         if args not in self.memo:
-    	    self.memo[args] = self.fn(*args)
+            self.memo[args] = self.fn(*args)
         return self.memo[args]
-
-'''
-    State is a namedtuple of (p, me, you, pending) where
-    p: 'me' or 'you', indicating which player's turn it is
-    me: my total score
-    you: your total score
-    pending: the number of pending points (accumulated on current turn)
-'''
 
 
 game_state = ["me", 0, 0, 0]
  # A strategy that ignores the state and chooses at random from possible moves.
+
 
 def clueless(state):
     random_move = random.SystemRandom().choice(possible_moves)
@@ -94,31 +86,6 @@ def roll(state, d):
 '''
 
 
-# def decorator(d):
-#     "Make function d a decorator: d wraps a function fn."
-#
-#     def _d(fn):
-#         return update_wrapper(d(fn), fn)
-#
-#     update_wrapper(_d, d)
-#     return _d
-#
-#
-# @decorator
-# def memo(f):
-#     cache = {}
-#
-#     def _f(*args):
-#         try:
-#             return cache[args]
-#         except KeyError:
-#             cache[args] = result = f(*args)
-#             return result
-#         except TypeError:
-#             return f(*args)
-#
-#     return _f
-
 def hold(state):
     if state[0] == "me":
         new_score = state[3] + state[1]
@@ -147,38 +114,6 @@ def legal_actions(state):
         return ['roll', 'hold']
 
 
-# # def p_win(me, you, pending):
-# def p_win1(state):
-#     me = state[1]
-#     you = state[2]
-#     pending = state[3]
-#     return p_win1(me, you, pending)
-
-def p_win(state):
-    # print(me)
-    # print(you)
-    # print(pending)
-    _, me, you, pending = state
-
-
-    # def _Pwin(me, you, pending):
-    # print(goal_score)
-    # print(me)
-    # print(you)
-    # print(pending)
-    if me + pending >= goal_score:
-        return 1
-    if you >= goal_score:
-        return 0
-    else:
-        return max(ev_action(state, action, p_win) for action in legal_actions(state))
-
-    #     Proll = (1 - _Pwin(you, me + 1, 0) +
-    #                  sum(_Pwin(me, you, pending + i) for i in (2, 3, 4, 5, 6))) / 6.0
-    #     return Proll if pending != 0 else max(1 - _Pwin(you, me + pending, 0), Proll)
-    #
-    # return _Pwin(me, you, pending)
-
 def p_win(state):
     '''The utility of a state; here just the probability that an optimal
     player whose turn it is to make can win from the current state.'''
@@ -196,20 +131,14 @@ def p_win(state):
             total = total + _Pwin(me, you, pending + i)
         total = float(total/6)
 
-
-        # Proll = (1 - _Pwin(you, me + 1, 0) +
-        #          sum(_Pwin(me, you, pending + i) for i in (2, 3, 4, 5, 6))) / 6.
-        return total if not pending else max(1 - _Pwin(you, me + pending, 0),
-                                             total)
+        return total if not pending else max(1 - _Pwin(you, me + pending, 0), total)
     return _Pwin(me, you, pending)
 
 
 def best_action(state):
- # return the optimal action for a state
- # define key ev (exp. value) for max function
-
     def ev(action): return ev_action(state, action, p_win)
     return max(legal_actions(state), key=ev)
+
 
 def ev_action(state, action, p_win):
     """The expected value of an action in this state.
@@ -217,26 +146,15 @@ def ev_action(state, action, p_win):
     We will look into the possible future, consider all legal actions, until the goal is reached
     """
     if action == 'hold':
-        # if we hold, our opponent will move, our probability of winning is 1 - p_win(opponent)
         return 1 - p_win(hold(state))
     if action == 'roll':
-        # if d==1: it's a pig-out, our opponent will move, our probability of winning is 1 - p_win(opponent)
-        # if d >1: get p_win for each value of d and calculate average
-        # return (1 - p_win(roll(state, 1)) + sum(p_win(roll(state, d)) for d in (2,3,4,5,6))) / 6
         total = 1 - p_win(roll(state, 1))
         for d in (2, 3, 4, 5, 6):
             total = total + p_win(roll(state, d))
-            # print(total)
         print(float (total/6))
         return float(total/6)
 
     raise ValueError
-
-
-
-
-
-
 
 
 def check_victory(state):
@@ -267,4 +185,13 @@ print(best_action(game_state))
 
 game_state = ['me', 0,0,0]
 print(p_win(game_state))
- #opgave c: hold at 20 is veel beter; die wint meer dan 2/3 keer
+
+
+'''
+opgave c: hold at 20 is veel beter; die wint meer dan 2/3 keer
+
+opgave d: de verwachte worp is gemiddeld 3,5; (1+2+3+4+5+6)/6
+            je kan ongeveer 5x gooien voor dat je een 1 krijgt
+            dus 5*3,5 = 17,5
+'''
+

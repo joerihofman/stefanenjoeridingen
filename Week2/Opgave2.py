@@ -149,7 +149,7 @@ class Strategies:
         elif game.other_player.current_score >= game.goal_score:
             return 0
         else:
-            return max(Strategies.ev_action(game, Strategies.legal_actions(), Strategies.win_probability) for action in possible_moves)
+            return max(Strategies.ev_action(game, Strategies.legal_actions(game), Strategies.win_probability) for action in possible_moves)
     # The value of a state: the probability that an optimal player whose turn it is
     # can win from the current state.
 
@@ -172,7 +172,7 @@ class Strategies:
         if action == "roll":
             # if d==1: it's a pig-out, our opponent will move, our probability of winning is 1 - p_win(opponent)
             # if d >1: get p_win for each value of d and calculate average
-            return (1 - p_win(Moves.roll(game, 1)) + sum(p_win(Moves.roll(game, Strategies.roll_dice())) for Strategies.roll_dice() in (2,3,4,5,6))) / 6.0
+            return (1 - p_win(Moves.roll(game, 1)) + sum(p_win(Moves.roll(game, Strategies.roll_dice())) for Strategies.roll_dice() in (2, 3, 4, 5, 6))) / 6.0
         raise ValueError
 
 
@@ -182,12 +182,4 @@ while new_game.game_counter < 100:
     Strategies.play_smart(new_game)
 print("me heeft " + new_game.me.victories.__str__() + " keer gewonnen, en you " + new_game.you.victories.__str__())
 
-
-'''
-opgave c: hold at 20 is veel beter; die wint meer dan 2/3 keer
-
-opgave d: de verwachte worp is gemiddeld 3,5; (1+2+3+4+5+6)/6
-            je kan ongeveer 5x gooien voor dat je een 1 krijgt
-            dus 5*3,5 = 17,5
-'''
 

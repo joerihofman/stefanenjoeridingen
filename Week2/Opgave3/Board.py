@@ -13,6 +13,8 @@ class Board:
         self.board[4][4] = Tile.WHITE
         self.board[3][4] = Tile.BLACK
         self.board[4][3] = Tile.BLACK
+        self.board[5][4] = Tile.WHITE
+        self.board[6][5] = Tile.WHITE
 
     def make_move(self, x, y):
         if BoardHelper().is_legal_move(self.board, x, y):
@@ -27,24 +29,59 @@ class Board:
             self.current_player = Tile.BLACK
             self.opponent = Tile.WHITE
 
-    def get_neighbors_of_opponent_for_making_a_move_by_the_current_player(self, x, y):
-        eigen_stenen = BoardHelper().get_possible_moves(self.board, self.current_player, self.opponent).__str__()
-        print(eigen_stenen)
-        # all_neighbors = BoardHelper().get_neighbors(self.board, x, y)
+    def get_neighbors_of_opponent_for_making_a_move_by_the_current_player(self):
+        return BoardHelper().get_possible_moves_considering_opponent(self.board, self.current_player, self.opponent)
 
 
 class BoardHelper:
     @staticmethod
-    def get_possible_moves(board, current_player, opponent):
+    def calculate_direction(original, new):
+        x_direction = int(original[0]) - int(new[0])
+        y_direction = int(original[1]) - int(new[1])
+
+        return x_direction, y_direction
+
+    @staticmethod
+    def get_possible_moves_considering_opponent(board, current_player, opponent):
         current_player_stones = []
+        opponent_player_stones = []
+        new_list = []
+        one_list = []
+        other_fckn_list = []
+
         for row in board:
             for column in row:
                 if column == current_player:
                     current_player_stones.append((board.index(row), row.index(column)))
-        for stone in current_player_stones:
-            print(BoardHelper.get_opponent_neighbors(board, *stone, opponent))
 
-        return current_player_stones
+        for stone in current_player_stones:
+            opponent_player_stones.append(BoardHelper.get_opponent_neighbors(board, *stone, opponent))
+
+        for stone_here in opponent_player_stones:
+            for stone in stone_here:
+                new_list.append(BoardHelper.get_opponent_neighbors(board, *stone, opponent))
+
+        for l in new_list:
+            for point in l:
+                one_list.append(point)
+
+        print(one_list)
+
+        for point in one_list:
+            for liste in opponent_player_stones:
+                for list_WAAROM_MOET_DIT in opponent_player_stones:
+                    if point not in liste and point not in list_WAAROM_MOET_DIT:
+                        other_fckn_list.append(point)
+
+        print("other :   " + other_fckn_list.__str__())
+
+        print("opponent initial: " + opponent_player_stones.__str__())
+        and_a_new_fckn_list = list(set(other_fckn_list))
+
+        print(and_a_new_fckn_list)
+        exit(1)
+
+        return current_player_stones, opponent_player_stones
 
     @staticmethod
     def get_opponent_neighbors(board, x, y, opponent):
@@ -53,7 +90,7 @@ class BoardHelper:
         for neighbor in all_neighbors:
             for row in board:
                 for column in row:
-                    if column == opponent and column == neighbor:
+                    if column == opponent and (board.index(row), row.index(column)) == neighbor:
                         neighboring_opponent_stones.append((board.index(row), row.index(column)))
         return neighboring_opponent_stones
 
@@ -70,7 +107,7 @@ class BoardHelper:
         return neighbors
 
     @staticmethod
-    def amount_of_each_colour(board):
+    def print_amount_of_each_colour(board):
         whites = 0
         blacks = 0
         for row in board.board:
