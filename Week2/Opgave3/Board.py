@@ -54,11 +54,18 @@ class BoardHelper:
         for stone in current_player_stones:
             direct_opponent_neighbors.append(BoardHelper.get_opponent_neighbors(board, stone[0], stone[1], opponent))
 
+        # for i in range(len(current_player_stones)):
+        #     stone = current_player_stones[i]
+        #     for opponents in direct_opponent_neighbors[i]:
+        #         for opponent in opponents:
+        #             print(BoardHelper.calculate_direction(stone, opponent))
+
         for i in range(len(current_player_stones)):
-            stone = current_player_stones[i]
-            for opponents in direct_opponent_neighbors[i]:
-                for opponent in opponents:
-                    print(BoardHelper.calculate_direction(stone, opponent))
+            neighbors = current_player_stones[i]
+            # print(neighbors)
+            for j in direct_opponent_neighbors[i]:
+                print(BoardHelper.calculate_direction(neighbors, j))
+
 
         print("current player: " + current_player_stones.__str__())
         print("opponent stones: " + direct_opponent_neighbors.__str__())
