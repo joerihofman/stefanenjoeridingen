@@ -44,10 +44,7 @@ class BoardHelper:
     @staticmethod
     def get_possible_moves_considering_opponent(board, current_player, opponent):
         current_player_stones = []
-        opponent_player_stones = []
-        new_list = []
-        one_list = []
-        other_fckn_list = []
+        direct_opponent_neighbors = []
 
         for row in board:
             for column in row:
@@ -55,33 +52,19 @@ class BoardHelper:
                     current_player_stones.append((board.index(row), row.index(column)))
 
         for stone in current_player_stones:
-            opponent_player_stones.append(BoardHelper.get_opponent_neighbors(board, *stone, opponent))
+            direct_opponent_neighbors.append(BoardHelper.get_opponent_neighbors(board, stone[0], stone[1], opponent))
 
-        for stone_here in opponent_player_stones:
-            for stone in stone_here:
-                new_list.append(BoardHelper.get_opponent_neighbors(board, *stone, opponent))
+        for i in range(len(current_player_stones)):
+            stone = current_player_stones[i]
+            for opponents in direct_opponent_neighbors[i]:
+                for opponent in opponents:
+                    print(BoardHelper.calculate_direction(stone, opponent))
 
-        for l in new_list:
-            for point in l:
-                one_list.append(point)
-
-        print(one_list)
-
-        for point in one_list:
-            for liste in opponent_player_stones:
-                for list_WAAROM_MOET_DIT in opponent_player_stones:
-                    if point not in liste and point not in list_WAAROM_MOET_DIT:
-                        other_fckn_list.append(point)
-
-        print("other :   " + other_fckn_list.__str__())
-
-        print("opponent initial: " + opponent_player_stones.__str__())
-        and_a_new_fckn_list = list(set(other_fckn_list))
-
-        print(and_a_new_fckn_list)
+        print("current player: " + current_player_stones.__str__())
+        print("opponent stones: " + direct_opponent_neighbors.__str__())
         exit(1)
 
-        return current_player_stones, opponent_player_stones
+        return current_player_stones
 
     @staticmethod
     def get_opponent_neighbors(board, x, y, opponent):
