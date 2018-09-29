@@ -71,8 +71,6 @@ class BoardHelper:
 
                 BoardHelper.weer_een_nieuwe(board, direction_x, direction_y, stone, opponent)
 
-
-
     @staticmethod
     def weer_een_nieuwe(board, direction_x, direction_y, start_stone, opponent):
         empty_location = 0
@@ -84,13 +82,13 @@ class BoardHelper:
             new_stone_y = 0
 
 
-            if BoardHelper.is_legal_direction(board, direction_x, direction_y, opponent):
-                new_stone_x =
-
-                new_stone = (new_stone_x, new_stone_y)
-                    BoardHelper.weer_een_nieuwe(board, direction_x, direction_y, new_stone, opponent)
-            else:
-                return False
+            # if BoardHelper.is_legal_direction(board, direction_x, direction_y, opponent):
+                # new_stone_x =
+                #
+                # new_stone = (new_stone_x, new_stone_y)
+                #     BoardHelper.weer_een_nieuwe(board, direction_x, direction_y, new_stone, opponent)
+            # else:
+            #     return False
         return empty_location
 
     @staticmethod
@@ -132,8 +130,16 @@ class BoardHelper:
     @staticmethod
     def is_legal_direction(board, x, y, opponent):
         #mag niet leeg zijn en moet opponent zijn
-        if board[x][y] != Tile.EMPTY and board[x][y] == opponent:
-            return True
-        else:
+        try:
+            if board[x][y] != Tile.EMPTY and board[x][y] == opponent:
+                return True
+            else:
+                return False
+        except IndexError:
             return False
 
+"""
+kijk bij alle lege vakken
+kijk voor elke vak of het mogelijk is om er iets te leggen
+in welke richting kom je stenen van de tegenstander tegen
+"""
