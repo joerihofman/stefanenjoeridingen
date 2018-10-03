@@ -2,8 +2,6 @@ from Week2.Opgave3.Tile import Tile
 
 
 class Board:
-    board = []
-
     def __init__(self):
         self.current_player = Tile.BLACK
         self.opponent = Tile.WHITE
@@ -13,13 +11,6 @@ class Board:
         self.board[4][4] = Tile.WHITE
         self.board[3][4] = Tile.BLACK
         self.board[4][3] = Tile.BLACK
-        self.board[5][4] = Tile.WHITE
-        self.board[6][5] = Tile.WHITE
-
-    def make_move(self, x, y):
-        if BoardHelper().is_legal_direction(self.board, x, y):
-            self.board[x][y] = self.current_player
-            self.other_player_turn()
 
     def other_player_turn(self):
         if self.current_player == Tile.BLACK:
@@ -32,74 +23,121 @@ class Board:
     def get_neighbors_of_opponent_for_making_a_move_by_the_current_player(self):
         return BoardHelper().get_possible_moves_considering_opponent(self.board, self.current_player, self.opponent)
 
+    def print_board(self):
+        print('')
+        for row in self.board:
+            print(' '.join([colour.value for colour in row]))
+        print('')
+
+    def flip_stones(self, begin, end, direction):
+        x = begin[0]
+        y = begin[1]
+        if direction[0] == 0:
+            while y != end[1]:
+                self.board[x][y] = self.current_player
+                y += direction[1]
+        elif direction[1] == 0:
+            while x != end[0]:
+                self.board[x][y] = self.current_player
+                x += direction[0]
+        else:
+            while x != end[0] and y != end[1]:
+                self.board[x][y] = self.current_player
+                x += direction[0]
+                y += direction[1]
+
+    def check_end_state(self):
+        for row in self.board:
+            for column in row:
+                if column == Tile.EMPTY:
+                    return False
+        return True
+
 
 class BoardHelper:
-    directions = [(-1, 0), (0, -1), (0, 1), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]
-
     @staticmethod
     def get_possible_moves_considering_opponent(board, current_player, opponent):
-        current_player_stones = []
-        direct_opponent_neighbors = []
+        mogelijk_begin_en_eind = []
 
-        for row in board:
-            for column in row:
-                if column == current_player:
-                    current_player_stones.append((board.index(row), row.index(column)))
+        filtered_empty_places_with_opponent_neighbors = \
+            BoardHelper.filter_empty_places_with_opponent_neighbors_for_duplicates(
+                BoardHelper.check_empty_spots_for_opponent_neighbors(
+                    board, BoardHelper.look_up_all_empty_spots(board), opponent
+                )
+            )
 
-        BoardHelper.do_things_for_directions(board, current_player_stones, opponent)
+        empty_places_with_directions = BoardHelper.replace_neighbors_with_their_direction(filtered_empty_places_with_opponent_neighbors)
 
-        # for stone in current_player_stones:
-        #     direct_opponent_neighbors.append(BoardHelper.get_opponent_neighbors(board, stone[0], stone[1], opponent))
+        for couple in empty_places_with_directions:
+            for direction in couple[1]:
+                x_of_own, y_of_own = BoardHelper.look_for_own_stones_with_empty_and_direction(board, couple[0], direction, current_player)
+                if x_of_own != -1:
+                    mogelijk_begin_en_eind.append(((couple[0]), (x_of_own, y_of_own), (direction)))
 
-        # for i in range(len(current_player_stones)):
-        #     neighbors = current_player_stones[i]
-        #     for j in direct_opponent_neighbors[i]:
-        #         print(BoardHelper.calculate_direction(neighbors, j))
-
-        print("current player: " + current_player_stones.__str__())
-        print("opponent stones: " + direct_opponent_neighbors.__str__())
-        exit(1)
-
-        return current_player_stones
+        return mogelijk_begin_en_eind
 
     @staticmethod
-    def do_things_for_directions(board, own_stones, opponent):
-        for stone in own_stones:
-            for direction in BoardHelper.directions:
-                direction_x = stone[0] - direction[0]
-                direction_y = stone[1] - direction[1]
+    def filter_empty_places_with_opponent_neighbors_for_duplicates(empty_places_with_opponent_neighbors):
+        filtered_list = []
+        for combination in empty_places_with_opponent_neighbors:
+            try:
+                if filtered_list.index(combination):
+                    pass
+            except ValueError:
+                filtered_list.append(combination)
 
-                BoardHelper.weer_een_nieuwe(board, direction_x, direction_y, stone, opponent)
-
-    @staticmethod
-    def weer_een_nieuwe(board, direction_x, direction_y, start_stone, opponent):
-        empty_location = 0
-        if board[direction_x][direction_y]:
-            new_x = start_stone[0] - direction_x
-            new_y = start_stone[1] - direction_y
-
-            new_stone_x = 0
-            new_stone_y = 0
-
-
-            # if BoardHelper.is_legal_direction(board, direction_x, direction_y, opponent):
-                # new_stone_x =
-                #
-                # new_stone = (new_stone_x, new_stone_y)
-                #     BoardHelper.weer_een_nieuwe(board, direction_x, direction_y, new_stone, opponent)
-            # else:
-            #     return False
-        return empty_location
+        return filtered_list
 
     @staticmethod
-    def calculate_direction(original, new):
-        x_direction = int(original[0]) - int(new[0])
-        y_direction = int(original[1]) - int(new[1])
+    def look_for_own_stones_with_empty_and_direction(board, empty_place, direction, current_player):
+        new_x = empty_place[0] + direction[0]
+        new_y = empty_place[1] + direction[1]
 
-        return x_direction, y_direction
+        while 0 <= new_x < len(board) and 0 <= new_y < len(board):
+            if board[new_x][new_y] == current_player:
+                return new_x, new_y
+            else:
+                new_x += direction[0]
+                new_y += direction[1]
+
+        return -1, -1
 
     @staticmethod
-    def get_all_directions(board, x, y):
+    def look_up_all_empty_spots(board):
+        empty_places = []
+        for row in range(len(board)):  #kan niet met for row in board omdat de lege gelijk is aan index 0
+            for column in range(len(board.__getitem__(row))):
+                if board[row][column] == Tile.EMPTY:
+                    empty_places.append((row, column))
+        return empty_places
+
+    @staticmethod
+    def check_empty_spots_for_opponent_neighbors(board, empty_places, opponent):
+        spots_with_opponent_neighbors = []
+        for spot in empty_places:
+            neighbors = BoardHelper.get_all_neighbors(board, *spot)
+            opponent_neighbors = []
+            for neighbor in neighbors:
+                if board[neighbor[0]][neighbor[1]] == opponent:
+                    opponent_neighbors.append((neighbor[0], neighbor[1]))
+                    spots_with_opponent_neighbors.append((spot, opponent_neighbors))
+        return spots_with_opponent_neighbors
+
+    @staticmethod
+    def replace_neighbors_with_their_direction(filtered_empty_places_with_opponent_neighbors):
+        list_with_stones_and_directions = []
+        for combination in filtered_empty_places_with_opponent_neighbors:
+            directions = []
+            for neighbor in combination[1]:
+                x_direction = int(neighbor[0] - combination[0][0])  #combi example: ((6, 4), [(5, 4), (6, 5)]); combi[0] = (6,4) combi[1] = [(5, 4),(6, 5)]
+                y_direction = int(neighbor[1] - combination[0][1])  #neighbor = (5, 4) & (6,5)
+                directions.append((x_direction, y_direction))
+
+            list_with_stones_and_directions.append((combination[0], directions))
+        return list_with_stones_and_directions
+
+    @staticmethod
+    def get_all_neighbors(board, x, y):
         neighbors = []
         length = len(board) - 1
 
@@ -120,23 +158,6 @@ class BoardHelper:
                 elif column == Tile.WHITE:
                     whites += 1
         print("Black: " + blacks.__str__() + " - White: " + whites.__str__())
-
-    @staticmethod
-    def print_board(board):
-        for row in board.board:
-            print(' '.join([colour.value for colour in row]))
-        print('')
-
-    @staticmethod
-    def is_legal_direction(board, x, y, opponent):
-        #mag niet leeg zijn en moet opponent zijn
-        try:
-            if board[x][y] != Tile.EMPTY and board[x][y] == opponent:
-                return True
-            else:
-                return False
-        except IndexError:
-            return False
 
 """
 kijk bij alle lege vakken
