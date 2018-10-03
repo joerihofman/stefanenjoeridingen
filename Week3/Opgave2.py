@@ -52,7 +52,7 @@ def neighbor(x, y):
 #
 # for a1, a2, k1, k2, q1, q2, j1, j2 in permutations(index):
 
-# orderings = list(permutations(index))
+orderings = list(permutations(index))
 
 for (a1, a2, k1, k2, q1, q2, j1, j2) in permutations(index):
     if not neighbor(a1, a2):

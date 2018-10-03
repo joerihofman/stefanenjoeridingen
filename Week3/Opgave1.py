@@ -16,3 +16,5 @@ def puzzle(floors):
 
 list = puzzle(floors)
 print(list)
+
+
