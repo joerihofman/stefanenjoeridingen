@@ -1,4 +1,3 @@
-from Week2.Opgave3.Board import BoardHelper
 import random
 
 

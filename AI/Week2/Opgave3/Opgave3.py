@@ -1,6 +1,6 @@
-from Week2.Opgave3.Board import Board
-from Week2.Opgave3.Board import BoardHelper
-from Week2.Opgave3.Move import Move
+from AI.Week2.Opgave3.Board import Board
+from AI.Week2.Opgave3.Board import BoardHelper
+from AI.Week2.Opgave3.Move import Move
 
 board = Board()
 board_helper = BoardHelper()

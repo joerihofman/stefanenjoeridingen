@@ -1,4 +1,4 @@
-from Week2.Opgave3.Tile import Tile
+from AI.Week2.Opgave3.Tile import Tile
 
 
 class Board:
