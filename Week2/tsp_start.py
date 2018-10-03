@@ -102,7 +102,6 @@ def remove_crossings(tour):
     changes = False
     for i in range(len(tour)):
         for j in range(len(tour)):
-            # print(j)
             if intersection(tour[i], tour[i-1], tour[j], tour[j-1]):
                 tour = two_opt_alg(tour, i, j)
                 changes = True
@@ -129,6 +128,7 @@ def plot_tsp(algorithm, cities):
     print("{} city tour with length {:.1f} in {:.3f} secs for {}"
           .format(len(tour), tour_length(tour), t1 - t0, algorithm.__name__))
 
+    plot_tour(tour)
     tour = remove_crossings(tour)
 
     print("{} city tour with length {:.1f}"

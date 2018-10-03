@@ -64,16 +64,12 @@ def just_play(state):
 def roll(state, d):
     if d == 1:
         if state[0] == "me":
-            new_score = state[1] + d
-            state[1] = new_score
-            state[3] = 0
-            state[0] = "you"
+            new_score = state[2] + d
+            reset_me(state, new_score)
             return state
         elif state[0] == "you":
             new_score = state[2] + d
-            state[2] = new_score
-            state[3] = 0
-            state[0] = "me"
+            reset_you(state, new_score)
             return state
     else:
         score = state[3] + d
@@ -89,16 +85,24 @@ def roll(state, d):
 def hold(state):
     if state[0] == "me":
         new_score = state[3] + state[1]
-        state[1] = new_score
-        state[3] = 0
-        state[0] = "you"
+        reset_me(state, new_score)
         return state
     elif state[0] == "you":
         new_score = state[3] + state[2]
-        state[2] = new_score
-        state[3] = 0
-        state[0] = "me"
+        reset_you(state, new_score)
         return state
+
+
+def reset_me(state, new_score):
+    state[1] = new_score
+    state[3] = 0
+    state[0] = "you"
+
+
+def reset_you(state, new_score):
+    state[2] = new_score
+    state[3] = 0
+    state[0] = "me"
 
 
 def hold_at_x(state, hold):
@@ -177,14 +181,14 @@ def roll_dice():
     return roll_value
 
 
-# while gamecounter < 100:
-#     just_play(game_state)
-# print(victories)
+while gamecounter < 100:
+    just_play(game_state)
+print(victories)
 
-print(best_action(game_state))
+# print(best_action(game_state))
 
-game_state = ['me', 0,0,0]
-print(p_win(game_state))
+# game_state = ['me', 0,0,0]
+# print(p_win(game_state))
 
 
 '''
