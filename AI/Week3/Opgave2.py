@@ -52,16 +52,37 @@ def neighbor(x, y):
 #
 # for a1, a2, k1, k2, q1, q2, j1, j2 in permutations(index):
 
-orderings = list(permutations(index))
+# orderings = list(permutations(index))
+#
+# for (a1, a2, k1, k2, q1, q2, j1, j2) in permutations(index):
+#     if not neighbor(a1, a2):
+#         if not neighbor(k1, k2):
+#             if not neighbor(q1, q2):
+#                 if not neighbor(j1, j2):
+#                     for ace in a1,a2:
+#                         for queen in q1,q2:
+#                             if not neighbor(ace, queen):
+#
+#
+#
+#                                 print([a1, a2, k1, k2, q1, q2, j1, j2])
 
-for (a1, a2, k1, k2, q1, q2, j1, j2) in permutations(index):
-    if not neighbor(a1, a2):
-        if not neighbor(k1, k2):
-            if not neighbor(q1, q2):
-                if not neighbor(j1, j2):
-                    print([a1, a2, k1, k2, q1, q2, j1, j2])
 
 
+
+
+for a1, a2, k1, k2, q1, q2, j1, j2 in permutations(index):
+    if neighbor(a1, k1) or neighbor(a1, k2):
+        if neighbor(a2, k1) or neighbor(a2, k2):
+            if neighbor(k1, q1) or neighbor(k1, q2):
+                if neighbor(k2, q1) or neighbor(k2, q2):
+                    if neighbor(q1, j1) or neighbor(q1, j2) or neighbor(q2, j1) or neighbor(q2, j2):
+                        if not neighbor(a1, q1) and not neighbor(a1, q2) and not neighbor(a2, q1) and not neighbor(a2, q2):
+                            if not neighbor(a1, a2):
+                                if not neighbor(k1, k2):
+                                    if not neighbor(q1, q2):
+                                        if not neighbor(j1, j2):
+                                            print({a1: 'ace', a2: 'ace', k1: 'king', k2: 'king', q1: 'qeen', q2: 'queen', j1: 'jack', j2: 'jack'})
 
 
 
