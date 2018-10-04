@@ -63,17 +63,16 @@ def dfs(board, index):
         print('jajaj')
         return True
 
-    for next in range(len(board)):
-        for card in [1, 2, 3, 4]:
-            print('card', card)
+    for card in [1, 2, 3, 4]:
+        print('card', card)
 
-            if safe(board, index, card):
-                board[index] = card
-                if dfs(board, index+1):
-                    return True
-
+        if safe(board, index, card):
+            board[index] = card
+            if dfs(board, index+1):
+                return True
+            else:
                 board[index] = 0
-
+                return
     return False
 
 
