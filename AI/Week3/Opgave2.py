@@ -4,10 +4,10 @@ import collections
 
 index = (0, 1, 2, 3, 4, 5, 6, 7)
 
-borders = [(0, 3, 5, 7), (1, 2, 3), (4, 5, 6)]
+borders = [(0, 3, 5, 7), (1, 2, 3), (4, 5, 6), (2, 4)]
 
 
-nodes_dict = {0: [3], 1: [2], 3: [0, 2, 5], 4: [2, 5], 5: [3, 4, 7, 6], 6: [5], 7:[5]}
+nodes_dict = {0: [3], 1: [2], 3: [0, 2, 5], 4: [2, 5], 5: [3, 4, 7, 6], 6: [5], 7: [5]}
 
 board1 = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
 
@@ -31,56 +31,45 @@ def same_neighbor(board, nodes_dict, index, card):
 
 def safe(board, index, card):
     list_of_values = list(board.values())
+    if board[index] != 0:
+        return False
+
+
     if list_of_values.count(card) > 2:
         return False
 
     if same_neighbor(board, nodes_dict, index, card):
         return False
 
-    if card == 1 and list_of_values.count(2) > 1:
-        print(same_neighbor(board, nodes_dict, index, 2))
-        if not same_neighbor(board, nodes_dict, index, 2):
-            return False
-
-    if card == 2 and list_of_values.count(3) > 1:
-        if not same_neighbor(board, nodes_dict, index, 3):
-            return False
-
-    if card == 3 and list_of_values.count(3) == 1:
-        if not same_neighbor(board, nodes_dict, index, 4):
-            return False
-
-    if card == 1 and list_of_values.count(3) > 1:
-        if same_neighbor(board, nodes_dict, index, 3):
-            return False
-
     return True
 
 
-def dfs(board, index):
-    if index >= 7:
-        print(board)
-        print('jajaj')
-        return True
-
-    for card in [1, 2, 3, 4]:
-        print('card', card)
-
-        if safe(board, index, card):
-            board[index] = card
-            if dfs(board, index+1):
-                return True
-            else:
-                board[index] = 0
-                return
-    return False
-
-
+# def dfs(board, index, card):
+#
+#     if index >= 8:
+#         print(board)
+#         return True
+#
+#     for card in [1, 2, 3, 4]:
+#             if safe(board, card, index):
+#
+#                 board[index] = card
+#
+#                 if dfs(board, number+1):
+#                     return True
+#
+#                 board[i] = 0
+#
+#     return False
+#
+#
+#
+# dfs(board1, 0)
 
 
         # print('true')
 
-dfs(board1, 0)
+# dfs(board1, 0)
 
 
 
@@ -120,6 +109,35 @@ counter = 0
 #                                             answers = ({a1: 'ace', a2: 'ace', k1: 'king', k2: 'king', q1: 'qeen', q2: 'queen', j1: 'jack', j2: 'jack'})
 #                                             print(collections.OrderedDict(sorted(answers.items())))
 # print('aantal mogelijkheden', counter)
+
+
+answers_list = []
+for a1, a2, k1, k2, q1, q2, j1, j2 in permutations(index):
+    if neighbor(a1, k1) or neighbor(a1, k2):
+        if neighbor(a2, k1) or neighbor(a2, k1):
+            if neighbor(k1, q1) or neighbor(k1, q2):
+                if neighbor(k2, q1) or neighbor(k2, q2):
+                    if neighbor(q1, j1) or neighbor(q1, j2):
+                        if neighbor(q2, j1) or neighbor(q2, j2):
+                            if not neighbor(a1, q1) and not neighbor(a1, q2):
+                                if not neighbor(a2, q1) and not neighbor(a2, q2):
+                                    if not neighbor(a1, a2):
+                                        if not neighbor(k1, k2):
+                                            if not neighbor(q1, q2):
+                                                if not neighbor(j1, j2):
+                                                    counter = counter + 1
+                                                    answers = ({a1: 'ace', a2: 'ace', k1: 'king', k2: 'king', q1: 'queen', q2: 'queen', j1: 'jack', j2: 'jack'})
+                                                    sorted_dict = (collections.OrderedDict(sorted(answers.items())))
+                                                    if sorted_dict not in answers_list:
+                                                        answers_list.append(sorted_dict)
+print('aantal mogelijkheden', counter)
+# print(answers_list)
+
+
+for i in answers_list:
+    print(i)
+
+
 
 
 
