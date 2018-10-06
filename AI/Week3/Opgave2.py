@@ -104,7 +104,6 @@ def dfs_backtracking(board, graph, number):
     for cel in range(len(board)):
 
         if board[cel] == 0:
-            print(counter)
 
             for card in ['A', 'K', 'Q', 'J']:
 
@@ -121,7 +120,7 @@ def dfs_backtracking(board, graph, number):
 #
 #
 #
-dfs_backtracking(board1, graph, 0, 0)
+dfs_backtracking(board1, graph, 0)
 
 
         # print('true')
