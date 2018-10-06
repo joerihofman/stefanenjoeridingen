@@ -94,20 +94,25 @@ def safe(board, index, card, graph):
     return True
 
 
-def dfs(board, graph, number):
-    print_board(board)
+def dfs_backtracking(board, graph, number):
+    # print_board(board)
     if number >= 8:
         # print(board)
         print('uitslag')
         print_board(board)
         return True
     for cel in range(len(board)):
+
         if board[cel] == 0:
+            print(counter)
+
             for card in ['A', 'K', 'Q', 'J']:
+
                 board[cel] = card
+
                 if safe(board, cel, card, graph):
 
-                    if dfs(board, graph, number+1):
+                    if dfs_backtracking(board, graph, number+1):
                         return True
 
                 board[cel] = 0
@@ -116,7 +121,7 @@ def dfs(board, graph, number):
 #
 #
 #
-dfs(board1, graph, 0)
+dfs_backtracking(board1, graph, 0, 0)
 
 
         # print('true')
@@ -163,31 +168,35 @@ counter = 0
 # print('aantal mogelijkheden', counter)
 
 # versie 2
-# answers_list = []
-# for a1, a2, k1, k2, q1, q2, j1, j2 in permutations(index):
-#     if neighbor(a1, k1) or neighbor(a1, k2):
-#         if neighbor(a2, k1) or neighbor(a2, k1):
-#             if neighbor(k1, q1) or neighbor(k1, q2):
-#                 if neighbor(k2, q1) or neighbor(k2, q2):
-#                     if neighbor(q1, j1) or neighbor(q1, j2):
-#                         if neighbor(q2, j1) or neighbor(q2, j2):
-#                             if not neighbor(a1, q1) and not neighbor(a1, q2):
-#                                 if not neighbor(a2, q1) and not neighbor(a2, q2):
-#                                     if not neighbor(a1, a2):
-#                                         if not neighbor(k1, k2):
-#                                             if not neighbor(q1, q2):
-#                                                 if not neighbor(j1, j2):
-#                                                     counter = counter + 1
-#                                                     answers = ({a1: 'ace', a2: 'ace', k1: 'king', k2: 'king', q1: 'queen', q2: 'queen', j1: 'jack', j2: 'jack'})
-#                                                     sorted_dict = (collections.OrderedDict(sorted(answers.items())))
-#                                                     if sorted_dict not in answers_list:
-#                                                         answers_list.append(sorted_dict)
-# print('aantal mogelijkheden', counter)
-# # print(answers_list)
+def opdrachtA():
+    #40230
+    answers_list = []
+    for a1, a2, k1, k2, q1, q2, j1, j2 in permutations(index):
+        if neighbor(a1, k1) or neighbor(a1, k2):
+            if neighbor(a2, k1) or neighbor(a2, k1):
+                if neighbor(k1, q1) or neighbor(k1, q2):
+                    if neighbor(k2, q1) or neighbor(k2, q2):
+                        if neighbor(q1, j1) or neighbor(q1, j2):
+                            if neighbor(q2, j1) or neighbor(q2, j2):
+                                if not neighbor(a1, q1) and not neighbor(a1, q2):
+                                    if not neighbor(a2, q1) and not neighbor(a2, q2):
+                                        if not neighbor(a1, a2):
+                                            if not neighbor(k1, k2):
+                                                if not neighbor(q1, q2):
+                                                    if not neighbor(j1, j2):
+                                                        counter = counter + 1
+                                                        answers = ({a1: 'ace', a2: 'ace', k1: 'king', k2: 'king', q1: 'queen', q2: 'queen', j1: 'jack', j2: 'jack'})
+                                                        sorted_dict = (collections.OrderedDict(sorted(answers.items())))
+                                                        if sorted_dict not in answers_list:
+                                                            answers_list.append(sorted_dict)
+    print('aantal mogelijkheden', counter)
+    for i in answers_list:
+        print(i)
+
+# print(answers_list)
 #
 #
-# for i in answers_list:
-#     print(i)
+
 
 
 
