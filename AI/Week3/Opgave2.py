@@ -102,31 +102,16 @@ def dfs_backtracking(board, graph, number):
         print_board(board)
         return True
     for cel in range(len(board)):
-
         if board[cel] == 0:
-
             for card in ['A', 'K', 'Q', 'J']:
-
                 board[cel] = card
-
                 if safe(board, cel, card, graph):
-
                     if dfs_backtracking(board, graph, number+1):
                         return True
-
                 board[cel] = 0
-
     return False
-#
-#
-#
+
 dfs_backtracking(board1, graph, 0)
-
-
-        # print('true')
-
-# dfs(board1, 0)
-
 
 
 def same_border(x, y):
@@ -191,11 +176,6 @@ def opdrachtA():
     print('aantal mogelijkheden', counter)
     for i in answers_list:
         print(i)
-
-# print(answers_list)
-#
-#
-
 
 
 
