@@ -1,6 +1,7 @@
 from itertools import permutations
 import collections
 
+counter = 0
 
 index = (0, 1, 2, 3, 4, 5, 6, 7)
 
@@ -96,9 +97,11 @@ def safe(board, index, card, graph):
 
 def dfs_backtracking(board, graph, number):
     # print_board(board)
+    global counter
+    counter = counter + 1
     if number >= 8:
         # print(board)
-        print('uitslag')
+        print('uitslag', counter)
         print_board(board)
         return True
     for cel in range(len(board)):
@@ -132,7 +135,7 @@ def neighbor(x, y):
             if abs(index1 - index2) == 1:
                 return True
 
-counter = 0
+
 
 # versie 1
 # for a1, a2, k1, k2, q1, q2, j1, j2 in permutations(index):

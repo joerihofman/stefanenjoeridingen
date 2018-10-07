@@ -65,6 +65,8 @@ def parse_string_to_dict(grid_string):
     # char_list1 = ['8', '5', '.', '.', '.', '2', '4', ...  ]
     assert len(char_list1) == 81
 
+    print(char_list1)
+
     # replace '.' with '1234567'
     char_list2 = [s.replace('.', '123456789') for s in char_list1]
 
@@ -79,39 +81,42 @@ def no_conflict(grid, c, v):
     return True
 
 def solve(grid):
-    display(grid)
+    # print(grid['A9'])
     # backtracking search a solution (DFS)
     # your code here
 
     if all(len(grid[s]) == 1 for s in cells):
+        display(grid)
         return grid  ## Solved!
 
 
     for c in cells:
         if len(grid[c]) > 1:
+            # print(grid[c])
             possible_values = grid[c]
             possible_number_list = list(possible_values)
             # print(possible_number_list)
 
             for number in possible_number_list:
 
-                grid[c] = number
 
-                if no_conflict(grid, c, number):
+
+                if no_conflict(grid.copy(), c, number):
+                    grid[c] = number
+                    # print(grid[c])
+                    # display(grid)
 
                     if solve(grid):
                         return True
 
-                grid[c] = possible_values
+                    grid[c] = possible_values
+            return
 
             # print(c)
             # print(grid[c])
 
 
     return False
-
-
-    pass
 
 # minimum nr of clues for a unique solution is 17
 s1 = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
@@ -128,7 +133,7 @@ s11 = '1.....3.8.7.4..............2.3.1...........958.........5.6...7.....8.2...
 s12 = '6..3.2....4.....1..........7.26............543.........8.15........4.2........7..'
 s13 = '....3..9....2....1.5.9..............1.2.8.4.6.8.5...2..75......4.1..6..3.....4.6.'
 s14 = '45.....3....8.1....9...........5..9.2..7.....8.........1..4..........7.2...6..8..'
-
+s15 = '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
 slist = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14]
 
 # for s in slist:
@@ -138,7 +143,7 @@ slist = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14]
 #     solve(d)
 #     print(time.time()-start_time)
 
-d = parse_string_to_dict(s8)
+d = parse_string_to_dict(s3)
 display(d)
 start_time = time.time()
 solve(d)
