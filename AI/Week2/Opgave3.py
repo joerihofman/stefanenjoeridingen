@@ -8,6 +8,7 @@ class Tile(Enum):
     WHITE = 'W'
     EMPTY = '.'
 
+
 board_size = 8
 
 board = [[Tile.EMPTY for x in range(board_size)] for y in range(board_size)]
@@ -17,11 +18,12 @@ board[4][4] = Tile.WHITE
 board[3][4] = Tile.BLACK
 board[4][3] = Tile.BLACK
 
-current_player = Tile.WHITE
-opponent = Tile.BLACK
+current_player = Tile.BLACK
+opponent = Tile.WHITE
 
 minimum_heuristic_val = -1
 maximum_heuristic_val = board_size * board_size + 4 * board_size + 4 + 1
+
 
 def other_player_turn():
     global current_player
@@ -54,9 +56,8 @@ def print_amount_of_each_colour():
     print("Black: " + blacks.__str__() + " - White: " + whites.__str__())
 
 
-def flip_stones(board, begin, end, direction):
+def flip_stones(board, current_player, begin, end, direction, change):
     new_board = board
-    global current_player
     x = begin[0]
     y = begin[1]
     if direction[0] == 0:
@@ -72,7 +73,12 @@ def flip_stones(board, begin, end, direction):
             new_board[x][y] = current_player
             x += direction[0]
             y += direction[1]
-    other_player_turn()
+    if change:
+        if current_player == Tile.BLACK:
+            new_player = Tile.WHITE
+        else:
+            new_player = Tile.BLACK
+        return new_board, new_player
     return new_board
 
 
@@ -134,12 +140,13 @@ def look_for_own_stones_with_empty_and_direction(board, empty_place, direction, 
 
 
 def possible_moves():
-    mogelijk_begin_en_eind = []
+    mogelijke_begin_en_eind = []
     spots_with_opponent_neighbors = []
     empty_places = look_up_all_empty_spots()
     filtered_list = []
 
     for spot in empty_places:
+        # Spot = (x, y)
         neighbors = get_all_neighbors(board, *spot)
         opponent_neighbors = []
         for neighbor in neighbors:
@@ -148,6 +155,7 @@ def possible_moves():
                 spots_with_opponent_neighbors.append((spot, opponent_neighbors))
 
     for combination in spots_with_opponent_neighbors:
+        # combination = ((x_begin, y_begin), [(x_eind, y_eind)])
         try:
             if filtered_list.index(combination):
                 pass
@@ -157,23 +165,27 @@ def possible_moves():
     empty_places_with_directions = replace_neighbors_with_their_direction(filtered_list)
 
     for couple in empty_places_with_directions:
+        # combination = ((x_begin, y_begin), [(x_eind, y_eind)])
         for direction in couple[1]:
             x_of_own, y_of_own = look_for_own_stones_with_empty_and_direction(board, couple[0], direction, current_player)
             if x_of_own != -1:
-                mogelijk_begin_en_eind.append(((couple[0]), (x_of_own, y_of_own), (direction)))
+                mogelijke_begin_en_eind.append(((couple[0]), (x_of_own, y_of_own), (direction)))
 
-    return mogelijk_begin_en_eind
+    return mogelijke_begin_en_eind
 
 
 def random_move():
     global board
+
     list_of_possible_moves = possible_moves()
     if len(list_of_possible_moves) != 0:
         random_index_for_list = random.randint(0, len(list_of_possible_moves) - 1)
         item_start = list_of_possible_moves[random_index_for_list][0]
         for combination in list_of_possible_moves:
+            # combination = ((x_begin, y_begin), (x_eind, y_eind), (x_richting, y_richting))
             if combination[0] == item_start:
-                flip_stones(board, combination[0], combination[1], combination[2])
+                flip_stones(board, current_player, combination[0], combination[1], combination[2], False)
+                other_player_turn()
     else:
         other_player_turn()
 
@@ -189,66 +201,73 @@ def heuristic_value():
         for y in board_range:
             if board[x][y] == current_player:
                 if (x == 0 or x == board_len - 1) and (y == 0 or y == board_len - 1):
-                    value += 4 # corner
+                    value += 4  # hoek
                 elif (x == 0 or x == board_len - 1) or (y == 0 or y == board_len - 1):
-                    value += 2 # side
+                    value += 2  # zijkant
                 else:
                     value += 1
     return value
 
 
 def negamax_controller(board):
+    global current_player
     max_points = 0
     move_to_make = []
     valid_moves = possible_moves()
     for move in valid_moves:
-        print(move)
-        tempboard = flip_stones(copy.deepcopy(board), move[0], move[1], move[2])
-        points = negamax(tempboard, depth=4, colour=1)
+        # move = ((x_begin, y_begin), (x_eind, y_eind), (x_richting, y_richting))
+        tempboard, temp_player = flip_stones(copy.deepcopy(board), copy.deepcopy(current_player), move[0], move[1], move[2], True)
+        points = negamax(tempboard, temp_player, depth=4, colour=1)
         if points > max_points:
             max_points = points
             move_to_make = [move[0], move[1], move[2]]
     if len(move_to_make) != 0:
-        flip_stones(board, move_to_make[0], move_to_make[1], move_to_make[2])
+        flip_stones(board, current_player, move_to_make[0], move_to_make[1], move_to_make[2], False)
+        other_player_turn()
     else:
         other_player_turn()
 
 
-def negamax(board, depth, colour):
+def negamax(board, current_player, depth, colour):
     if depth == 0:
         return colour * heuristic_value()
     value = -1
     valid_moves = possible_moves()
     for move in valid_moves:
-        tempboard = flip_stones(copy.deepcopy(board), move[0], move[1], move[2])
-        val = -negamax(tempboard, depth-1, -colour)
+        # move = ((x_begin, y_begin), (x_eind, y_eind), (x_richting, y_richting))
+        tempboard, temp_player = flip_stones(copy.deepcopy(board), copy.deepcopy(current_player), move[0], move[1], move[2], True)
+        val = -negamax(tempboard, temp_player, depth-1, -colour)
         value = max(value, val)
     return value
+
 
 def negamax_prune_controller(board):
     max_points = 0
     move_to_make = []
     valid_moves = possible_moves()
     for move in valid_moves:
-        tempboard = flip_stones(copy.deepcopy(board), move[0], move[1], move[2])
-        points = negamax_prune(tempboard, depth=4, colour=1, alpha=minimum_heuristic_val, beta=maximum_heuristic_val)
+        # move = ((x_begin, y_begin), (x_eind, y_eind), (x_richting, y_richting))
+        tempboard, temp_player = flip_stones(copy.deepcopy(board), copy.deepcopy(current_player), move[0], move[1], move[2], True)
+        points = negamax_prune(tempboard, temp_player, depth=4, colour=1, alpha=minimum_heuristic_val, beta=maximum_heuristic_val)
         if points > max_points:
             max_points = points
             move_to_make = [move[0], move[1], move[2]]
     if len(move_to_make) != 0:
-        flip_stones(board, move_to_make[0], move_to_make[1], move_to_make[2])
+        flip_stones(board, current_player, move_to_make[0], move_to_make[1], move_to_make[2], False)
+        other_player_turn()
     else:
         other_player_turn()
 
 
-def negamax_prune(board, depth, colour, alpha, beta):
+def negamax_prune(board, temp_player, depth, colour, alpha, beta):
     if depth == 0:
         return colour * heuristic_value()
     value = -1
     valid_moves = possible_moves()
     for move in valid_moves:
-        tempboard = flip_stones(copy.deepcopy(board), move[0], move[1], move[2])
-        val = -negamax_prune(tempboard, depth-1, -colour, -beta, -alpha)
+        # move = ((x_begin, y_begin), (x_eind, y_eind), (x_richting, y_richting))
+        tempboard, temp_player = flip_stones(copy.deepcopy(board), temp_player, move[0], move[1], move[2], True)
+        val = -negamax_prune(tempboard, temp_player, depth-1, -colour, -beta, -alpha)
         value = max(value, val)
         alpha = max(alpha, val)
         if alpha >= beta:

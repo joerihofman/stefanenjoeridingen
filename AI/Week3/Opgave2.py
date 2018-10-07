@@ -7,34 +7,16 @@ index = (0, 1, 2, 3, 4, 5, 6, 7)
 
 borders = [(0, 3, 5, 7), (1, 2, 3), (4, 5, 6), (2, 4)]
 
-
 graph = {0: [3], 1: [2], 2:[1, 3, 4], 3: [0, 2, 5], 4: [2, 5], 5: [3, 4, 7, 6], 6: [5], 7: [5]}
 
 board1 = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
+
 
 def print_board(board):
     print(' ', ' ', board[0])
     print(board[1], board[2], board[3])
     print(' ', board[4], board[5], board[6])
     print(' ',' ', board[7])
-
-
-
-
-
-#
-# def next_to(borders, x):
-#     for i in borders:
-
-# def same_neighbor(board, nodes_dict, index, card):
-#     for key in nodes_dict[index]:
-#         print(key)
-#         print('value of key', board[key])
-#         if board[key] == card:
-#             print('true')
-#             return True
-#     print('same_neighbor = false')
-#     return False
 
 
 def same_neighbor(board, index, graph):
@@ -44,6 +26,7 @@ def same_neighbor(board, index, graph):
             return True
 
     return False
+
 
 def neigbor_cards(board, index, graph, card1, card2):
     card1_list = []
@@ -57,18 +40,13 @@ def neigbor_cards(board, index, graph, card1, card2):
             for neighbor in graph[index_ace]:
                 temp_list_neighbors.append(board[neighbor])
 
-
             if 0 not in temp_list_neighbors:
                 if card2 not in temp_list_neighbors:
                     return False
-            # temp_list_neighbors = []
 
         return True
     else:
         return True
-
-
-
 
 
 def safe(board, index, card, graph):
@@ -113,6 +91,7 @@ def dfs_backtracking(board, graph, number):
                         return True
                 board[cel] = 0
     return False
+
 
 dfs_backtracking(board1, graph, 0)
 

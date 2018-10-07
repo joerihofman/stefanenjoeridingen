@@ -12,10 +12,9 @@ def puzzle(floors):
                     if P > K:
                         if R - L != 1 and R - L != -1:
                             if L - K != 1 and L - K != -1:
-                                return {H: 'h', K: 'k', L: 'l', P: 'p', R : 'r'}
+                                return {H: "Hopper", K: "Kay", L: "Liskov", P: "Perlis", R : "Ritchie"}
 
 
-list = puzzle(floors)
-print(list)
+print(puzzle(floors))
 
 
