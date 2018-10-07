@@ -1,6 +1,7 @@
 import copy
 import random
 from enum import Enum
+import time
 
 
 class Tile(Enum):
@@ -214,13 +215,15 @@ def negamax_controller(board):
     max_points = 0
     move_to_make = []
     valid_moves = possible_moves()
+    timer = time.time()
     for move in valid_moves:
-        # move = ((x_begin, y_begin), (x_eind, y_eind), (x_richting, y_richting))
-        tempboard, temp_player = flip_stones(copy.deepcopy(board), copy.deepcopy(current_player), move[0], move[1], move[2], True)
-        points = negamax(tempboard, temp_player, depth=4, colour=1)
-        if points > max_points:
-            max_points = points
-            move_to_make = [move[0], move[1], move[2]]
+        if time.time() - timer < 20:
+            # move = ((x_begin, y_begin), (x_eind, y_eind), (x_richting, y_richting))
+            tempboard, temp_player = flip_stones(copy.deepcopy(board), copy.deepcopy(current_player), move[0], move[1], move[2], True)
+            points = negamax(tempboard, temp_player, depth=4, colour=1)
+            if points > max_points:
+                max_points = points
+                move_to_make = [move[0], move[1], move[2]]
     if len(move_to_make) != 0:
         flip_stones(board, current_player, move_to_make[0], move_to_make[1], move_to_make[2], False)
         other_player_turn()
@@ -245,13 +248,15 @@ def negamax_prune_controller(board):
     max_points = 0
     move_to_make = []
     valid_moves = possible_moves()
+    timer = time.time()
     for move in valid_moves:
-        # move = ((x_begin, y_begin), (x_eind, y_eind), (x_richting, y_richting))
-        tempboard, temp_player = flip_stones(copy.deepcopy(board), copy.deepcopy(current_player), move[0], move[1], move[2], True)
-        points = negamax_prune(tempboard, temp_player, depth=4, colour=1, alpha=minimum_heuristic_val, beta=maximum_heuristic_val)
-        if points > max_points:
-            max_points = points
-            move_to_make = [move[0], move[1], move[2]]
+        if time.time() - timer < 20:
+            # move = ((x_begin, y_begin), (x_eind, y_eind), (x_richting, y_richting))
+            tempboard, temp_player = flip_stones(copy.deepcopy(board), copy.deepcopy(current_player), move[0], move[1], move[2], True)
+            points = negamax_prune(tempboard, temp_player, depth=4, colour=1, alpha=minimum_heuristic_val, beta=maximum_heuristic_val)
+            if points > max_points:
+                max_points = points
+                move_to_make = [move[0], move[1], move[2]]
     if len(move_to_make) != 0:
         flip_stones(board, current_player, move_to_make[0], move_to_make[1], move_to_make[2], False)
         other_player_turn()
@@ -278,7 +283,10 @@ def negamax_prune(board, temp_player, depth, colour, alpha, beta):
 while not end_state_reached():
     # random_move()
     # negamax_controller(board)
-    negamax_prune_controller(board)
+    if current_player == Tile.WHITE:
+        negamax_prune_controller(board)
+    else:
+        random_move()
     print_board(board)
     print_amount_of_each_colour()
 
