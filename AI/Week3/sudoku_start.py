@@ -80,15 +80,23 @@ def no_conflict(grid, c, v):
            return False # conflict
     return True
 
+
+def is_valid_supuku(grid):
+    for cell in cells:
+        if len(grid[cell]) > 1:
+            return False
+
+    return True
+
+
 def solve(grid):
     # print(grid['A9'])
     # backtracking search a solution (DFS)
     # your code here
 
-    if all(len(grid[s]) == 1 for s in cells):
+    if is_valid_supuku(grid):
         display(grid)
-        return grid  ## Solved!
-
+        return grid
 
     for c in cells:
         if len(grid[c]) > 1:
@@ -101,7 +109,7 @@ def solve(grid):
 
 
 
-                if no_conflict(grid.copy(), c, number):
+                if no_conflict(grid, c, number):
                     grid[c] = number
                     # print(grid[c])
                     # display(grid)
@@ -136,15 +144,15 @@ s14 = '45.....3....8.1....9...........5..9.2..7.....8.........1..4..........7.2.
 s15 = '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
 slist = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14]
 
-# for s in slist:
-#     d = parse_string_to_dict(s)
-#     display(d)
-#     start_time = time.time()
-#     solve(d)
-#     print(time.time()-start_time)
+for s in slist:
+    d = parse_string_to_dict(s)
+    display(d)
+    start_time = time.time()
+    solve(d)
+    print(time.time()-start_time)
 
-d = parse_string_to_dict(s3)
-display(d)
-start_time = time.time()
-solve(d)
-print(time.time()- start_time)
+# d = parse_string_to_dict(s8)
+# display(d)
+# start_time = time.time()
+# solve(d)
+# print(time.time()- start_time)
