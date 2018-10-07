@@ -31,7 +31,7 @@ peers = dict((s, set(sum(units[s],[]))-set([s])) for s in cells)
 def test():
     # a set of tests that must pass
     assert len(cells) == 81
-    assert len(unitlist) == 27
+    assert len(unit_list) == 27
     assert all(len(units[s]) == 3 for s in cells)
     assert all(len(peers[s]) == 20 for s in cells)
     assert units['C2'] == [['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2', 'I2'],
@@ -79,8 +79,38 @@ def no_conflict(grid, c, v):
     return True
 
 def solve(grid):
+    display(grid)
     # backtracking search a solution (DFS)
     # your code here
+
+    if all(len(grid[s]) == 1 for s in cells):
+        return grid  ## Solved!
+
+
+    for c in cells:
+        if len(grid[c]) > 1:
+            possible_values = grid[c]
+            possible_number_list = list(possible_values)
+            # print(possible_number_list)
+
+            for number in possible_number_list:
+
+                grid[c] = number
+
+                if no_conflict(grid, c, number):
+
+                    if solve(grid):
+                        return True
+
+                grid[c] = possible_values
+
+            # print(c)
+            # print(grid[c])
+
+
+    return False
+
+
     pass
 
 # minimum nr of clues for a unique solution is 17
@@ -101,10 +131,15 @@ s14 = '45.....3....8.1....9...........5..9.2..7.....8.........1..4..........7.2.
 
 slist = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14]
 
-for s in slist:
-    d = parse_string_to_dict(s)
-    display(d)
-    start_time = time.time()
-    solve(d)
-    print(time.time()-start_time)
+# for s in slist:
+#     d = parse_string_to_dict(s)
+#     display(d)
+#     start_time = time.time()
+#     solve(d)
+#     print(time.time()-start_time)
 
+d = parse_string_to_dict(s8)
+display(d)
+start_time = time.time()
+solve(d)
+print(time.time()- start_time)
