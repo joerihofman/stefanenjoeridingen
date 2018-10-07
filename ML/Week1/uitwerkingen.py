@@ -19,8 +19,11 @@ def drawGraph(data):
     # roteren (waarom?).
     # Maak gebruik van pytplot.scatter om dit voor elkaar te krijgen.
 
-    #YOUR CODE HERE
-    pass
+    x = data[0]
+    y = data[1]
+    plt.plot(x, y)
+    plt.show()
+
 
 
 

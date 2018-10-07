@@ -1,5 +1,5 @@
 import numpy as np
-from uitwerkingen import *
+from ML.Week1.uitwerkingen import *
 
 '''
 Onderstaande regels laden het npy-bestand in waarin de data is opgeslagen.
@@ -26,29 +26,29 @@ y = data[:, [1]]
 theta = np.zeros( (2, 1) )
 
 # ========================  OPGAVE 1 ========================
-print ("\nOpgave 1: drawGraph")
-print ("Tekenen van de scatter plot van de data...")
+print("\nOpgave 1: drawGraph")
+print("Tekenen van de scatter plot van de data...")
 drawGraph(data)
-input ("Druk op een toets om verder te gaan...");
+input("Druk op een toets om verder te gaan...")
 
 # ========================  OPGAVE 2 ========================
-print ("\nOpgave 2: computeCost")
-J = computeCost(X, y, theta);
-print ("De gevonden waarde van J is {:f}".format(J))
-print ("Deze waarde zou rond de 32.07 moeten liggen")
+print("\nOpgave 2: computeCost")
+J = computeCost(X, y, theta)
+print("De gevonden waarde van J is {:f}".format(J))
+print("Deze waarde zou rond de 32.07 moeten liggen")
 
-input ("Druk op een toets om verder te gaan...");
+input("Druk op een toets om verder te gaan...")
 
 # ========================  OPGAVE 3 ========================
-print ("\nOpgave 3: gradientDescent")
+print("\nOpgave 3: gradientDescent")
 alpha = 0.01
 num_iters = 1500
 theta = np.zeros( (1,2) )
 theta = gradientDescent(X, y, theta, alpha, num_iters)
-print ("De gevonden waarde voor theta={}".format(theta))
-print ("Deze waarde zou rond de (-3.63, 1.16) moeten liggen.");
-input ("Druk op een toets om verder te gaan...");
+print("De gevonden waarde voor theta={}".format(theta))
+print("Deze waarde zou rond de (-3.63, 1.16) moeten liggen.")
+input("Druk op een toets om verder te gaan...")
 
 # ========================  OPGAVE 4 ========================
-print ("\nOpgave 4: contour plot")
+print("\nOpgave 4: contour plot")
 contourPlot(X, y)
