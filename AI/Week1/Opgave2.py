@@ -2,74 +2,101 @@ import random
 import string
 
 
-# https://stackoverflow.com/questions/746082/how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-solver
-
-class Board():
-
-    filled_board = []
-
-    def __init__(self, size):
-        self.filled_board = [[random.choice(string.ascii_lowercase) for c in range(size)] for r in range(size)]
-
-    def get_board(self):
-        return self.filled_board
-
-class Testboard():
-
-    filled_board = []
-
-    def __init__(self):
-        line_one = ['a', 'c', 'h', 't', 'x', 'x', 'o']
-        line_two = ['o', 'g', 'e', 'n', 'x', 'x', 'l']
-        line_three = ['c', 'e', 's', 'k', 'p', 'a', 'i']
-        line_four = ['x', 'x', 'x', 'o', 'x', 'x', 'e']
-        line_five = ['x', 'x', 'h', 'x', 'x', 'x', 'x']
-        line_six = ['x', 'c', 'x', 'o', 'x', 'x', 'x']
-        line_seven = ['s', 'x', 'x', 'x', 'm', 'x', 'x']
-
-        self.filled_board = [line_one, line_two, line_three, line_four, line_five, line_six, line_seven]
-
-    def get_board(self):
-        return self.filled_board
+def make_board(size):
+    board = [[random.choice(string.ascii_lowercase) for c in range(size)] for r in range(size)]
+    return board
 
 
-class Utils():
-    @staticmethod
-    def words_from_file_to_set():
-        set_of_words = set()
-        with open('words.txt') as f:
-            for line in f:
-                set_of_words.add(line.strip("\n"))
-        return set_of_words
+def get_dictionary():
+    prefix = set()
+    words = []
+
+    with open('words.txt', 'r') as f:
+        for word in f:
+            word = word.strip()
+            words.append(word)
+
+            for i in range(len(word)):
+                prefix.add(word[:i + 1])
+
+    return words, prefix
 
 
-board = Testboard().get_board()
-
-# for line in board:
-#     print(line)
-
-#---https://stackoverflow.com/questions/1620940/determining-neighbours-of-cell-two-dimensional-list---
-
-X=7
-Y=7
-
-neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
-                           for y2 in range(y-1, y+2)
-                           if (-1 < x <= X and
-                               -1 < y <= Y and
-                               (x != x2 or y != y2) and
-                               (0 <= x2 <= X) and
-                               (0 <= y2 <= Y))]
-
-print(neighbors(2,2))
-
-for i in list:
-    print(i)
+def print_board(board):
+    for row in board:
+        print(' '.join([str(letter) for letter in row]))
 
 
+def in_board(board, x, y):
+    return 0 <= y < len(board) and 0 <= x < len(board[y])
 
-# print(list(Utils.words_to_set()))
+
+def get_letter(board, position):
+    return board[position[0], position[1]]
 
 
-    # with open('words.txt', 'rt', encoding='utf-8') as f:
-    #     print(f.read())
+def get_neighboars(board, row, col):
+    adj = []
+    length = len(board) - 1
+
+    postitions = [(row-1, col), (row, col-1), (row, col+1), (row+1, col)]
+    for pos in postitions:
+        row = pos[0]
+        col = pos[1]
+        if row < 0:
+            row = length
+        elif row > length:
+            row = 0
+        if col < 0:
+            col = length
+        elif col > length:
+            col = 0
+        adj.append((row, col))
+    return adj
+
+
+words, prefixes = get_dictionary()
+
+
+def dfs(board, found, row, col, path=None, word=None):
+    letter = board[row][col]
+
+    if path is None or word is None:
+        path = [(row, col)]
+        word = letter
+    else:
+        path.append((row, col))
+        word = word + letter
+
+        if word not in prefixes:
+            return
+
+    print(path)
+    print(word)
+
+    if word in words:
+
+        found.add(word)
+
+    for neighbor in get_neighboars(board, row, col):
+        if neighbor not in path:
+            dfs(board, found, neighbor[0], neighbor[1], path[:], word[:])
+        else:
+            print("niets gevonden in ", path)
+
+
+def play_boggle(board, found):
+    for r in range(len(board)):
+        for c in range(len(board)):
+            dfs(board, found, r, c)
+
+
+board = make_board(4)
+print_board(board)
+
+found = set()
+play_boggle(board, found)
+
+print(found)
+
+print_board(board)

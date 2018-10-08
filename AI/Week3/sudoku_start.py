@@ -1,35 +1,21 @@
 import time
 
-# helper function
 def cross(A, B):
-    # cross product of chars in string A and chars in string B
     return [a+b for a in A for b in B]
 
-#   1 2 3 4 .. 9
-# A
-# B
-# C
-# D
-# ..
-# I
 
 digits = '123456789'
 rows   = 'ABCDEFGHI'
 cols   = digits
-cells  = cross(rows, cols) # for 3x3 81 cells A1..9, B1..9, C1..9, ... 
+cells  = cross(rows, cols)
 
-# unit = a row, a column, a box; list of all units
-unit_list = ([cross(r, cols) for r in rows] +                             # 9 rows 
+unit_list = ([cross(r, cols) for r in rows] +                             # 9 rows
              [cross(rows, c) for c in cols] +                             # 9 cols
              [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]) # 9 units
-# peers is a dict {cell : list of peers}
-# every cell c has 20 peers p (i.e. cells that share a row, col, box)
-# units['A1'] is a list of lists, and sum(units['A1'],[]) flattens this list
 units = dict((s, [u for u in unit_list if s in u]) for s in cells)
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in cells)
 
 def test():
-    # a set of tests that must pass
     assert len(cells) == 81
     assert len(unit_list) == 27
     assert all(len(units[s]) == 3 for s in cells)
@@ -42,14 +28,13 @@ def test():
                                'A1', 'A3', 'B1', 'B3'])
     print ('All tests pass.')
 
+
 def display(grid):
-    # grid is a dict of {cell: string}, e.g. grid['A1'] = '1234'
     print()
     for r in rows:
         for c in cols:
             v = grid[r+c]
-            # avoid the '123456789'
-            if v == '123456789': 
+            if v == '123456789':
                 v = '.'
             print (''.join(v), end=' ')
             if c == '3' or c == '6': print('|', end='')
@@ -58,26 +43,20 @@ def display(grid):
             print('-------------------')
     print()
 
+
 def parse_string_to_dict(grid_string):
-    # grid_string is a string like '4.....8.5.3..........7......2.....6....   '
-    # convert grid_string into a dict of {cell: chars}
     char_list1 = [c for c in grid_string if c in digits or c == '.']
-    # char_list1 = ['8', '5', '.', '.', '.', '2', '4', ...  ]
     assert len(char_list1) == 81
-
     print(char_list1)
-
-    # replace '.' with '1234567'
     char_list2 = [s.replace('.', '123456789') for s in char_list1]
 
-    # grid {'A1': '8', 'A2': '5', 'A3': '123456789',  }
     return dict(zip(cells, char_list2))
 
+
 def no_conflict(grid, c, v):
-    # check if assignment is possible: value v not a value of a peer
     for p in peers[c]:
         if grid[p] == v:
-           return False # conflict
+           return False
     return True
 
 
@@ -94,9 +73,7 @@ def arc_consistency(grid):
     for c in cells:
         if len(grid[c]) == 1:
             values_to_delete = grid[c]
-            # print(values_to_delete)
             for u in peers[c]:
-                # print(u)
                 if values_to_delete in grid[u]:
                     grid[u] = grid[u].replace(values_to_delete, '')
                     if grid[u] == '':
@@ -105,48 +82,33 @@ def arc_consistency(grid):
 
 
 def solve(grid):
-
     dfs(grid)
 
 
 def dfs(grid):
     if grid is False:
         return False
-
     if is_valid_sudoku(grid):
         display(grid)
         return grid
 
-
-    n ,c = min((len(grid[s]), s) for s in cells if len(grid[s]) > 1)
+    n, c = min((len(grid[s]), s) for s in cells if len(grid[s]) > 1)
 
     if len(grid[c]) > 1:
-            # print(grid[c])
         possible_values = grid[c]
         possible_number_list = list(possible_values)
-        # print(possible_number_list)
 
         grid = arc_consistency(grid)
 
         for number in possible_number_list:
-
             if no_conflict(grid, c, number):
                 grid[c] = number
-                # grid = arc_consistency(grid)
-                # print(grid[c])
-                # display(grid)
-
-                # grid = arc_consistency(grid)
                 if dfs(grid.copy()):
                     return True
-
-                # grid[c] = possible_values
                 grid[c] = possible_values
         return
-
     return False
 
-# minimum nr of clues for a unique solution is 17
 s1 = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
 s2 = '85...24..72......9..4.........1.7..23.5...9...4...........8..7..17..........36.4.'
 s3 = '...5....2...3..85997...83..53...9...19.73...4...84...1.471..6...5...41...1...6247'
