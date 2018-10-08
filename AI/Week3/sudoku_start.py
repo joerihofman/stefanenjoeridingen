@@ -81,7 +81,7 @@ def no_conflict(grid, c, v):
     return True
 
 
-def is_valid_supuku(grid):
+def is_valid_sudoku(grid):
     for cell in cells:
         if len(grid[cell]) > 1:
             return False
@@ -89,31 +89,8 @@ def is_valid_supuku(grid):
     return True
 
 
-
-# def arc_consistency(grid):
-#     changes = False
-#     for c in cells:
-#
-#         if len(grid[c]) > 1:
-#             possible_number_list = list(grid[c])
-#             for number in possible_number_list:
-#
-#                 if not no_conflict(grid, c, number):
-#                     new_value = grid[c].replace(number, '')
-#                     if len(new_value) > 2:
-#                         grid[c] = new_value
-#                         # print(grid[c])
-#                         changes = True
-#
-#
-#     if changes:
-#         return arc_consistency(grid)
-#     else:
-#         return grid
-
 def arc_consistency(grid):
-    changes = False
-
+    grid_copy = grid.copy()
     for c in cells:
         if len(grid[c]) == 1:
             values_to_delete = grid[c]
@@ -122,124 +99,50 @@ def arc_consistency(grid):
                 # print(u)
                 if values_to_delete in grid[u]:
                     grid[u] = grid[u].replace(values_to_delete, '')
-                    changes = True
-
-    if changes:
-        return arc_consistency(grid)
-    else:
-        return grid
-
-
-
-
-# def sort_values(grid):
-#
-#     for c in cells:
-#
-#         if len(grid[c] > 0):
-
-
-
-
-
-
-
-def sort_by_values_len(grid):
-    dict_len= {key: len(value) for key, value in grid.items()}
-    import operator
-    sorted_key_list = sorted(dict_len.items(), key=operator.itemgetter(1), reverse=False)
-    sorted_dict = [{item[0]: grid[item [0]]} for item in sorted_key_list]
-    # print(sorted_dict)
-    return sorted_key_list
-
-
-
-
-
-
+                    if grid[u] == '':
+                        return grid_copy
+    return grid
 
 
 def solve(grid):
-    # print(grid)
-
-    grid = arc_consistency(grid)
-    # grid = sort_by_values_len(grid)
-    # print(grid)
-    # for c, v in grid.items():
-    #     print(c)
 
     dfs(grid)
-    # print(grid['A9'])
-    # backtracking search a solution (DFS)
-    # your code here
 
-    # if is_valid_supuku(grid):
-    #     display(grid)
-    #     return grid
-    #
-    # # grid = remove_conflict(grid)
-    #
-
-
-    # for c in cells:
-    #     if len(grid[c]) > 1:
-    #         # print(grid[c])
-    #         possible_values = grid[c]
-    #         possible_number_list = list(possible_values)
-    #         # print(possible_number_list)
-    #
-    #         for number in possible_number_list:
-    #
-    #
-    #
-    #             if no_conflict(remove_conflict(grid), c, number):
-    #                 grid[c] = number
-    #                 # print(grid[c])
-    #                 # display(grid)
-    #
-    #                 if solve(grid):
-    #                     return True
-    #
-    #                 grid[c] = possible_values
-    #         return
-    #
-    #         # print(c)
-    #         # print(grid[c])
-    #
-    #
-    # return False
 
 def dfs(grid):
-    if is_valid_supuku(grid):
+    if grid is False:
+        return False
+
+    if is_valid_sudoku(grid):
         display(grid)
         return grid
 
-        # grid = remove_conflict(grid)
+
     n ,c = min((len(grid[s]), s) for s in cells if len(grid[s]) > 1)
-    # print(c)
-    # for c in grid:
-    # print(c)
+
     if len(grid[c]) > 1:
             # print(grid[c])
         possible_values = grid[c]
         possible_number_list = list(possible_values)
         # print(possible_number_list)
 
+        grid = arc_consistency(grid)
+
         for number in possible_number_list:
 
             if no_conflict(grid, c, number):
                 grid[c] = number
+                # grid = arc_consistency(grid)
                 # print(grid[c])
                 # display(grid)
 
-                if dfs(grid):
+                # grid = arc_consistency(grid)
+                if dfs(grid.copy()):
                     return True
 
+                # grid[c] = possible_values
                 grid[c] = possible_values
-        # return
-
-                # print(c)
-                # print(grid[c])
+        return
 
     return False
 
@@ -259,21 +162,14 @@ s12 = '6..3.2....4.....1..........7.26............543.........8.15........4.2...
 s13 = '....3..9....2....1.5.9..............1.2.8.4.6.8.5...2..75......4.1..6..3.....4.6.'
 s14 = '45.....3....8.1....9...........5..9.2..7.....8.........1..4..........7.2...6..8..'
 s15 = '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
+
+
 slist = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14]
 
+for s in slist:
+    d = parse_string_to_dict(s)
+    display(d)
+    start_time = time.time()
+    solve(d)
+    print(time.time()-start_time)
 
-
-# remove_conflict(parse_string_to_dict(s2))
-
-# for s in slist:
-#     d = parse_string_to_dict(s)
-#     display(d)
-#     start_time = time.time()
-#     solve(d)
-#     print(time.time()-start_time)
-
-d = parse_string_to_dict(s15)
-display(d)
-start_time = time.time()
-solve(d)
-print(time.time()- start_time)

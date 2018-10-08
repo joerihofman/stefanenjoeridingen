@@ -31,17 +31,14 @@ def neigbor_cards(board, index, graph, card1, card2):
     for index in range(index):
         if board[index] == card1:
             card1_list.append(index)
-
     if len(card1_list) > 0:
         for index_ace in card1_list:
             temp_list_neighbors = []
             for neighbor in graph[index_ace]:
                 temp_list_neighbors.append(board[neighbor])
-
             if 0 not in temp_list_neighbors:
                 if card2 not in temp_list_neighbors:
                     return False
-
         return True
     else:
         return True
