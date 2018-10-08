@@ -280,13 +280,36 @@ def negamax_prune(board, temp_player, depth, colour, alpha, beta):
     return value
 
 
+def user_playing():
+    valid_moves = possible_moves()
+    print("Possibilities:")
+    if len(valid_moves) != 0:
+        for move in valid_moves:
+            print(move[0])
+        x = input("Which X do you choose? ")
+        y = input("Which Y do you choose? ")
+        user_coord = (int(x), int(y))
+        for move in valid_moves:
+            if move[0] == user_coord:
+                flip_stones(board, current_player, move[0], move[1], move[2], False)
+                other_player_turn()
+                return
+        print("please use valid x and y coordinates")
+        user_playing()
+    else:
+        print("You can not play")
+        other_player_turn()
+
+
 while not end_state_reached():
-    # random_move()
-    # negamax_controller(board)
-    if current_player == Tile.WHITE:
+    print_board(board)
+    if current_player == Tile.BLACK:
+        # negamax_controller(board)
         negamax_prune_controller(board)
     else:
-        random_move()
+        # random_move()
+        print("YOU ARE WHITE")
+        user_playing()
     print_board(board)
     print_amount_of_each_colour()
 
