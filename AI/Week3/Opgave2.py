@@ -20,11 +20,9 @@ def print_board(board):
 
 
 def same_neighbor(board, index, graph):
-
     for neighbor in graph[index]:
         if board[index] == board[neighbor]:
             return True
-
     return False
 
 
@@ -74,11 +72,9 @@ def safe(board, index, card, graph):
 
 
 def dfs_backtracking(board, graph, number):
-    # print_board(board)
     global counter
     counter = counter + 1
     if number >= 8:
-        # print(board)
         print('uitslag', counter)
         print_board(board)
         return True
@@ -115,25 +111,6 @@ def neighbor(x, y):
                 return True
 
 
-
-# versie 1
-# for a1, a2, k1, k2, q1, q2, j1, j2 in permutations(index):
-#     if neighbor(a1, k1) or neighbor(a1, k2):
-#         if neighbor(a2, k1) or neighbor(a2, k2):
-#             if neighbor(k1, q1) or neighbor(k1, q2):
-#                 if neighbor(k2, q1) or neighbor(k2, q2):
-#                     if neighbor(q1, j1) or neighbor(q1, j2) or neighbor(q2, j1) or neighbor(q2, j2):
-#                         if not neighbor(a1, q1) and not neighbor(a1, q2) and not neighbor(a2, q1) and not neighbor(a2, q2):
-#                             if not neighbor(a1, a2):
-#                                 if not neighbor(k1, k2):
-#                                     if not neighbor(q1, q2):
-#                                         if not neighbor(j1, j2):
-#                                             counter = counter + 1
-#                                             answers = ({a1: 'ace', a2: 'ace', k1: 'king', k2: 'king', q1: 'qeen', q2: 'queen', j1: 'jack', j2: 'jack'})
-#                                             print(collections.OrderedDict(sorted(answers.items())))
-# print('aantal mogelijkheden', counter)
-
-# versie 2
 def opdrachtA():
     #40230
     answers_list = []
@@ -150,12 +127,10 @@ def opdrachtA():
                                             if not neighbor(k1, k2):
                                                 if not neighbor(q1, q2):
                                                     if not neighbor(j1, j2):
-                                                        counter = counter + 1
                                                         answers = ({a1: 'ace', a2: 'ace', k1: 'king', k2: 'king', q1: 'queen', q2: 'queen', j1: 'jack', j2: 'jack'})
                                                         sorted_dict = (collections.OrderedDict(sorted(answers.items())))
                                                         if sorted_dict not in answers_list:
                                                             answers_list.append(sorted_dict)
-    print('aantal mogelijkheden', counter)
     for i in answers_list:
         print(i)
 
