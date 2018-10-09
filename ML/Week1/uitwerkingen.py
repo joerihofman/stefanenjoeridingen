@@ -23,6 +23,9 @@ def drawGraph(data):
     y = data[:, 1:2]
 
     plt.scatter(x, y)
+
+    plt.xlabel('X')
+    plt.ylabel('y')
     plt.show()
 
 
