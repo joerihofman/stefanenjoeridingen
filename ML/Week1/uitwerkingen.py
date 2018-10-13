@@ -24,7 +24,7 @@ def drawGraph(data):
 
     plt.scatter(x, y)
 
-    plt.xlabel('X')
+    plt.xlabel('x')
     plt.ylabel('y')
     plt.show()
 
@@ -53,7 +53,15 @@ def computeCost(X, y, theta):
 
     J = 0
 
+
     # YOUR CODE HERE
+
+    m = y.shape[0]
+    print('aantal data punten:', m)
+
+    predictions = np.dot(X, theta)
+    print('voorspelling')
+    print(predictions)
 
     return J
 
