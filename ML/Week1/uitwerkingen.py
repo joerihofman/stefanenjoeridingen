@@ -58,10 +58,18 @@ def computeCost(X, y, theta):
 
     m = y.shape[0]
     print('aantal data punten:', m)
+    print('aantal X', X)
 
-    predictions = np.dot(X, theta)
+    theta = np.reshape(theta, (1,2))
+    print(theta)
+
+    predictions = np.dot(X, theta.T)
     print('voorspelling')
     print(predictions)
+    errors = (predictions - y) ** 2
+    J = sum(errors)/(m*2)
+    J = J[0]
+
 
     return J
 
