@@ -57,19 +57,11 @@ def computeCost(X, y, theta):
     # YOUR CODE HERE
 
     m = y.shape[0]
-    print('aantal data punten:', m)
-    print('aantal X', X)
+    predictions = np.dot(X, theta)
 
-    theta = np.reshape(theta, (1,2))
-    print(theta)
-
-    predictions = np.dot(X, theta.T)
-    print('voorspelling')
-    print(predictions)
     errors = (predictions - y) ** 2
     J = sum(errors)/(m*2)
     J = J[0]
-
 
     return J
 
@@ -97,11 +89,14 @@ def gradientDescent(X, y, theta, alpha, num_iters):
     #      alpha keer het gemiddelde van de som van de vermenigvuldiging uit 3
 
     m = y.shape[0]
-
     for _ in range(num_iters):
+        prediction = np.dot(X, theta.T)
+        difference = prediction - y
+
         for i,val in enumerate(theta):
             # YOUR CODE HERE
-            pass
+            J = np.dot(difference.T, X)
+            theta[i] = theta[i] - (alpha * (sum(J) / m))
 
     # aan het eind van deze dubbele loop retourneren we de nieuwe waarde van theta
     # (wat is de dimensionaliteit van theta op dit moment?).
@@ -126,8 +121,23 @@ def contourPlot(X, y):
     T1, T2 = np.meshgrid(t1, t2)
 
     J_vals = np.zeros( (len(t2), len(t2)) )
+    # print(J_vals)
 
-    #YOUR CODE HERE 
+    #YOUR CODE HERE
+    # for i, val1 in enumerate(t1):
+    #     for j, val2 in enumerate(t2):
+    #         theta = np.array([val1, val2])
+    #         J = computeCost(X, y, theta)
+    #         J_vals[i][j] = J
+
+    for i in range(len(t1)):
+        for j in range(len(t2)):
+            jemoeder = (t1[i])
+            jevader = (t2[j])
+            thetha = np.array([jemoeder, jevader])
+            J = computeCost(X, y, thetha)
+            J_vals[i][j] = J
+
 
     surf = ax.plot_surface(T1, T2, J_vals, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
