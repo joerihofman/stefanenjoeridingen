@@ -83,6 +83,7 @@ def dfs_backtracking(board, graph, number):
                     if dfs_backtracking(board, graph, number+1):
                         return True
                 board[cel] = 0
+            # return
     return False
 
 

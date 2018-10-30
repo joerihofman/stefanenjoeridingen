@@ -25,6 +25,7 @@ X = np.hstack( (np.ones((m,1)), data[:, [0]]) )
 y = data[:, [1]]
 theta = np.zeros( (2, 1) )
 
+
 # ========================  OPGAVE 1 ========================
 print("\nOpgave 1: drawGraph")
 print("Tekenen van de scatter plot van de data...")
