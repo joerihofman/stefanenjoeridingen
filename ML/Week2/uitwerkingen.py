@@ -32,8 +32,9 @@ def sigmoid(z):
     # vector is.  
     # Je kunt gebruik maken van de methode exp() in NumPy.
 
-    1 / (1 + np.exp(-z))
-    pass
+    z = 1 / (1 + np.exp(-z))
+    return z
+
 
 
 def predictNumber(Theta1, Theta2, X):
@@ -60,8 +61,14 @@ def predictNumber(Theta1, Theta2, X):
     #       van deze output het grootste getal staat; dit is het getal dat 
     #       correspondeert met het cijfer van het huidige sample (let er daarbij
     #       op dat de indexen zero-based zijn)
-
-
     # Voeg enen toe aan het begin van elke stap en reshape de uiteindelijke 
     # vector zodat deze dezelfde dimensionaliteit heeft als y in de exercise.
-    pass
+
+    a1 = np.insert(X, 0, 1, axis=1)
+    a2 = sigmoid(np.dot(a1, Theta1.T))
+    a2 = np.insert(a2, 0, 1, axis=1)
+    output = sigmoid(np.dot(a2, Theta2.T))
+    p = np.argmax(output, axis=1)
+    p = np.reshape(p, (5000, 1)) + 1
+
+    return p

@@ -24,8 +24,8 @@ def drawGraph(data):
 
     plt.scatter(x, y)
 
-    plt.xlabel('x')
-    plt.ylabel('y')
+    plt.xlabel('X = grootte van de steden (x 10.000 personen)')
+    plt.ylabel('Y = winst van de vervoerder (x 10.000 euro)')
     plt.show()
 
 
@@ -121,20 +121,12 @@ def contourPlot(X, y):
     T1, T2 = np.meshgrid(t1, t2)
 
     J_vals = np.zeros( (len(t2), len(t2)) )
-    # print(J_vals)
-
-    #YOUR CODE HERE
-    # for i, val1 in enumerate(t1):
-    #     for j, val2 in enumerate(t2):
-    #         theta = np.array([val1, val2])
-    #         J = computeCost(X, y, theta)
-    #         J_vals[i][j] = J
 
     for i in range(len(t1)):
         for j in range(len(t2)):
-            jemoeder = (t1[i])
-            jevader = (t2[j])
-            thetha = np.array([jemoeder, jevader])
+            t1_val = (t1[i])
+            t2_val = (t2[j])
+            thetha = np.array([t1_val, t2_val])
             J = computeCost(X, y, thetha)
             J_vals[i][j] = J
 
