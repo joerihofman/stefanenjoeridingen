@@ -307,9 +307,9 @@ while not end_state_reached():
         # negamax_controller(board)
         negamax_prune_controller(board)
     else:
-        # random_move()
-        print("YOU ARE WHITE")
-        user_playing()
+        random_move()
+        # print("YOU ARE WHITE")
+        # user_playing()
     print_board(board)
     print_amount_of_each_colour()
 

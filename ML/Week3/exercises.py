@@ -76,8 +76,8 @@ input ("Druk op een toets om verder te gaan.")
 # een 5 is, en False voor alle andere waarden.
 
 #YOUR CODE HERE - deel 1
-y_train_5 = 0
-y_test_5 = 0
+y_train_5 = (y_train == 5)
+y_test_5 = (y_test == 5)
 
 # Maak vervolgens een SGDClassifier aan. Deze classifier is afhankelijk van een
 # bepaalde 'randomness' tijdens het trainen; je moet dus een parameter random_state
@@ -85,7 +85,7 @@ y_test_5 = 0
 # waarde 42.
 
 #YOUR CODE HERE - deel 2
-sgd_clf = 0
+sgd_clf = SGDClassifier(random_state=42)
 
 # Deze classifier heeft een methode 'fit' die twee arrays verwacht: één met de 
 # training samples en één met de target values.  Bedenk wat in dit geval wat is, 
@@ -96,11 +96,11 @@ sgd_clf = 0
 # aangemaakt.
 
 #YOUR CODE HERE - deel 3
-#sgd_clf.fit() 
+sgd_clf.fit(X_train, y_train_5)
 print ("Voorspellen van digit nummer {}: dit zou een 5 moeten opleveren.".format(test_waarde))
-print ( sgd_clf.predict([some_digit]) ) 
+print ( sgd_clf.predict([some_digit]) )
 
-# Tenslotte gebruiken we de methode cross_val_score() om de accuratesse van 
+# Tenslotte gebruiken we de methode cross_val_score() om de accuratesse van
 # onze classifier te bepalen. Deze methode heeft een parameter cv (voor cross-
 # validation) waarmee je kunt aangeven in hoeveel delen de data geknipt moet 
 # worden. Geef deze parameter een waarde van 3, en experimenteer met verschillende
@@ -108,7 +108,7 @@ print ( sgd_clf.predict([some_digit]) )
 # Zorg ervoor dat deze cross-validatie score wordt afgedrukt.
 
 #YOUR CODE HERE - deel 4
-y_train_pred = 0;
+y_train_pred = cross_val_predict(sgd_clf, X_train, y_train_5, cv=3);
 print ("Bepalen van de cross-validatie-score:")
 print (y_train_pred)
 
@@ -122,11 +122,15 @@ print (y_train_pred)
 # opgave op Blackboard voor specifieke info hierover).
 
 #YOUR CODE HERE
-cm = None
+cm = confusion_matrix(y_train_5, y_train_pred)
 print ("De confusion matrix van deze classifier:");
 print (cm)
 
 #YOUR CODE HERE
+TPR = cm[0][0] / ( cm[0][0] + cm[1][0] )
+PPV = cm[0][0] / ( cm[0][0] + cm[0][1] )
+TNR = cm[1][1] / ( cm[1][1] + cm[0][1] )
+FPR = cm[0][1] / ( cm[0][1] + cm[1][1] )
 
 print ("TPR: {}; PPV: {}, TNR: {}, FPR: {}".format(TPR, PPV, TNR, FPR))
 
@@ -139,5 +143,17 @@ print ("TPR: {}; PPV: {}, TNR: {}, FPR: {}".format(TPR, PPV, TNR, FPR))
 # kunnen aanbrengen?
 
 #YOUR CODE HERE
+sgd_clf_whole = SGDClassifier(random_state=42)
+sgd_clf_whole.fit(X_train, y_train)
 
+whole_prediction = cross_val_predict(sgd_clf_whole, X_train, y_train, cv=3)
+conf_matrix = confusion_matrix(y_train, whole_prediction)
 
+TPR_whole = conf_matrix[0][0] / ( conf_matrix[0][0] + conf_matrix[1][0] )
+PPV_whole = conf_matrix[0][0] / ( conf_matrix[0][0] + conf_matrix[0][1] )
+TNR_whole = conf_matrix[1][1] / ( conf_matrix[1][1] + conf_matrix[0][1] )
+FPR_whole = conf_matrix[0][1] / ( conf_matrix[0][1] + conf_matrix[1][1] )
+
+print("Van Ons -----------------------------------------------------------------------")
+print(conf_matrix)
+print ("TPR: {}; PPV: {}, TNR: {}, FPR: {}".format(TPR_whole, PPV_whole, TNR_whole, FPR_whole))
