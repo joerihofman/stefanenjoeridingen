@@ -15,6 +15,7 @@ X,y = mnist['data'], mnist['target']
 test_waarde = 36000
 some_digit = X[test_waarde] #dit is een 5
 
+pass
 
 # ========================  OPGAVE 1 ======================== 
 # Teken het plaatje dat hoort bij de data op regel 36000 (die we hierboven

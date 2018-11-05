@@ -41,4 +41,6 @@ X,y = mnist['data'], mnist['target']
 # y.shape = 7000, 1
 
 test_waarde = 36000 
-some_digit = X[test_waarde] 
+some_digit = X[test_waarde]
+
+pass
