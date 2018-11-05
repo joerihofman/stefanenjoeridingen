@@ -157,3 +157,7 @@ FPR_whole = conf_matrix[0][1] / ( conf_matrix[0][1] + conf_matrix[1][1] )
 print("Van Ons -----------------------------------------------------------------------")
 print(conf_matrix)
 print ("TPR: {}; PPV: {}, TNR: {}, FPR: {}".format(TPR_whole, PPV_whole, TNR_whole, FPR_whole))
+
+
+plt.imshow(conf_matrix, cmap=matplotlib.cm.binary, interpolation="nearest")
+plt.show()
