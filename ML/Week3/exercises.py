@@ -1,4 +1,7 @@
 # MACHINE LEARNING OPGAVE 3
+import urllib
+from urllib.error import HTTPError
+
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
@@ -9,13 +12,30 @@ from sklearn.model_selection import cross_val_score, cross_val_predict
 from sklearn.metrics import confusion_matrix
 
 print ("Laden van de data en zetten van de X en de y")
-mnist = fetch_mldata('MNIST original')
+# alternatieve methode van laden: https://github.com/ageron/handson-ml/issues/7 (in de except een alternatieve manier)
+print("Alternatief inladen!")
+
+# Alternative method to load MNIST, if mldata.org is down
+from scipy.io import loadmat
+mnist_alternative_url = "https://github.com/amplab/datascience-sp14/raw/master/lab7/mldata/mnist-original.mat"
+mnist_path = "./mnist-original.mat"
+response = urllib.request.urlopen(mnist_alternative_url)
+with open(mnist_path, "wb") as f:
+    content = response.read()
+    f.write(content)
+mnist_raw = loadmat(mnist_path)
+mnist = {
+    "data": mnist_raw["data"].T,
+    "target": mnist_raw["label"][0],
+    "COL_NAMES": ["label", "data"],
+    "DESCR": "mldata.org dataset: mnist-original",
+}
+print("Success!")
 X,y = mnist['data'], mnist['target']
 
 test_waarde = 36000
 some_digit = X[test_waarde] #dit is een 5
 
-pass
 
 # ========================  OPGAVE 1 ======================== 
 # Teken het plaatje dat hoort bij de data op regel 36000 (die we hierboven
