@@ -49,7 +49,7 @@ some_digit = X[test_waarde] #dit is een 5
 
 # Experimenteer met verschillende waarden van some_digit om een idee te 
 # krijgen van de verschillende vormen van de cijfers in deze dataset.
-plt.show()
+
 img = some_digit.reshape(28,28)
 plt.imshow(img, cmap=matplotlib.cm.binary, interpolation="nearest")
 plt.show()
@@ -142,15 +142,14 @@ print ("TPR: {}; PPV: {}, TNR: {}, FPR: {}".format(TPR, PPV, TNR, FPR))
 # accuratesse van de classifier? Waar zou je eventueel nog verbeteringen in
 # kunnen aanbrengen?
 
-#YOUR CODE HERE
 sgd_clf_whole = SGDClassifier(random_state=42)
 sgd_clf_whole.fit(X_train, y_train)
 
 whole_prediction = cross_val_predict(sgd_clf_whole, X_train, y_train, cv=3)
 conf_matrix = confusion_matrix(y_train, whole_prediction)
 
-print("Van Ons -----------------------------------------------------------------------")
 print(conf_matrix)
-print ("TPR: {}; PPV: {}, TNR: {}, FPR: {}".format(TPR_whole, PPV_whole, TNR_whole, FPR_whole))
 
 plt.imshow(conf_matrix, cmap=plt.cm.gray)
+
+plt.show();
